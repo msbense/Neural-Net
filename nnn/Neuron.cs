@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;   
+
+namespace nnn
+{
+    public class Neuron
+    {
+        public List<double> InputWeights { get; set; }
+        public double Error { get; set; } 
+        public double SumError { get; set; }
+        public double Bias { get; set; }
+        public double Activation { get; set; }
+        public double Input { get; set; }
+        public Neuron(int numWeights) 
+        {
+            Random rng = new Random();
+            InputWeights = new List<double>();
+            for (int i = 0; i < numWeights; i++)
+            {
+                InputWeights.Add(((rng.NextDouble() - .5) * 2) * (1/Math.Sqrt(numWeights))); 
+            }
+            Bias = ((rng.NextDouble() - .5) * 2); 
+            Activation = 0;
+        }
+    }
+}
