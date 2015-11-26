@@ -29,7 +29,10 @@ namespace nnn
 
         public List<double> ff(List<double> inputs) 
         {
-            
+            if (inputs.Count != Neurons[0].Count)
+            {
+                throw new ArgumentException("Size of input array must equal number of input neurons");
+            }
             List<double> outputs = new List<double>();
             for (int inputNeuronIndex = 0; inputNeuronIndex < Neurons[0].Count; inputNeuronIndex++)
             {
@@ -62,6 +65,14 @@ namespace nnn
 
         public void bp(List<double> outputs, List<double> correct)
         {
+            if (outputs.Count != correct.Count)
+            {
+                throw new ArgumentException("Arguments must be of the same size");
+            }
+            if (correct.Count != Neurons[Neurons.Count - 1].Count)
+            {
+                throw new ArgumentException("Correct and Output arrays must be equal to the number of output neurons");
+            }
             for (int neuronIndex = 0; neuronIndex < Neurons[Neurons.Count - 1].Count; neuronIndex++) //calculate error in final layer
             {
                 Neuron n = Neurons[Neurons.Count - 1][neuronIndex];
