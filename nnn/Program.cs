@@ -16,9 +16,9 @@ namespace nnn
             
                 Network n = new Network(2, 100, 1)
                 {
-                    LearningConstant = .015,
+                    LearningConstant = .15,
                     RegularizationConstant = 0,
-                    totalTrainingSize = 10000,
+                    totalTrainingSize = 25,
                 };
 
                 RunBasic(n);
@@ -63,7 +63,9 @@ namespace nnn
         public static void RunBasic(Network n)
         {
             Random rng = new Random();
-            #region Training
+           
+            var allInputs = new List<List<double>>();
+            var allOutputs = new List<List<double>>();
             for (int i = 0; i < n.totalTrainingSize; i++)
             {
                 var inputs = new List<double>();
@@ -71,14 +73,33 @@ namespace nnn
                 double y = rng.Next(0, 266);
                 inputs.Add(x);
                 inputs.Add(y);
-                var correctOutputs = new List<double>(new double[] {(Math.Pow(x, 2) < y) ? 1.0 : 0.0});
-
-                n.bp(n.ff(inputs), correctOutputs);
-
+                allInputs.Add(inputs);
+                var correctOutputs = new List<double>(new double[] { (Math.Pow(x, 2) < y) ? 1.0 : 0.0 });
+                allOutputs.Add(correctOutputs);
             }
-            #endregion
 
-            #region Validation
+            double currentPercentCorrect = 0;
+            int currentEpoch = 1;
+            while (currentPercentCorrect < .9) 
+            {
+                for (int i = 0; i < allInputs.Count; i++)
+                {
+                    var inputs = allInputs[i];
+                    var correctOutputs = allOutputs[i];
+                    n.bp(n.ff(inputs), correctOutputs);
+                }
+                currentPercentCorrect = RunBasicValidation(n);
+                Console.WriteLine("Epoch " + currentEpoch + ": " + currentPercentCorrect);
+                currentEpoch++;
+            }
+            Console.ReadKey();
+            Console.ReadKey();
+        }
+
+        public static double RunBasicValidation(Network n)
+        {
+            Random rng = new Random();
+            double percentCorrect = 0;
             for (int i = 0; i < 15; i++)
             {
                 var inputs = new List<double>();
@@ -86,13 +107,16 @@ namespace nnn
                 double y = rng.Next(0, 266);
                 inputs.Add(x);
                 inputs.Add(y);
-                var correctOutputs = new List<double>(new double[] { (Math.Pow(x, 2) < y) ? 1.0 : 0.0});
-                
-                Console.WriteLine("\tIs " + Math.Pow(x, 2) + " < " + y + "\t NN: " + ((n.ff(inputs)[0] > .5) ? "Yes" : "No") + " C: " + (correctOutputs[0] == 1.0 ? "Yes" : "No"));
+                var correctOutput = (Math.Pow(x, 2) < y) ? 1.0 : 0.0;
+                var netResponse = n.ff(inputs)[0] > .5 ? 1.0 : 0.0;
+                if (correctOutput == netResponse)
+                {
+                    percentCorrect++;
+                }
             }
-            #endregion
-            Console.ReadKey();
-        }
 
+            percentCorrect /= 15;
+            return percentCorrect;
+        }
     }
 }
