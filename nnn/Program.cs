@@ -14,49 +14,50 @@ namespace nnn
         static void Main(string[] args)
         {
             
-                Network n = new Network(2, 100, 1)
-                {
-                    LearningConstant = .15,
-                    RegularizationConstant = 0,
-                    totalTrainingSize = 25,
-                };
+            Network n = new Network(784, 50, 10)
+            {
+                LearningConstant = 3,
+                RegularizationConstant = 0,
+                totalTrainingSize = 60000,
+            };
 
-                RunBasic(n);
-                return; 
-                #region Training
-                //Training
-                var dataSet = MNISTProc.getImageData(@"..\..\data\train-images.idx3-ubyte", @"..\..\data\train-labels.idx1-ubyte", true);
-                int inputSet = 0;
-                foreach (var image in dataSet)
+            //Training
+            var dataSet = MNISTProc.getImageData(@"..\..\data\train-images.idx3-ubyte", @"..\..\data\train-labels.idx1-ubyte", true);
+            double currentPercentCorrect = 0;
+            int epoch = 1;
+            while (currentPercentCorrect < .7)
+            {
+                for (int inputSet = 0; inputSet < dataSet.Count; inputSet++)
                 {
-                    var guess = n.ff(image.Item1);
-                    n.bp(guess, new List<double>(image.Item2));
-                    
-                    //Console.WriteLine(inputSet++);
+                    var image = dataSet[inputSet];
+                    n.bp(n.ff(image.Item1), new List<double>(image.Item2));
                 }
-                #endregion
+                currentPercentCorrect = RunMNISTValidation(n);
+                Console.WriteLine("Epoch " + epoch + ": " + currentPercentCorrect);
+                epoch++;
+            }
 
-                #region Validation
-                var validationSet = MNISTProc.getImageData(@"..\..\data\t10k-images.idx3-ubyte", @"..\..\data\t10k-labels.idx1-ubyte", false);
-                int numCorrect = 0;
-                for (int i = 0; i < 20; i++)
+            Console.ReadKey();
+            Console.ReadKey();
+        }
+
+        public static double RunMNISTValidation(Network n)
+        {
+            var validationSet = MNISTProc.getImageData(@"..\..\data\t10k-images.idx3-ubyte", @"..\..\data\t10k-labels.idx1-ubyte", false);
+            int numCorrect = 0;
+            for (int i = 0; i < 20; i++)
+            {
+                var image = validationSet[i];
+                var netOutput = n.ff(image.Item1);
+                var correctOutput = image.Item2;
+                var netGuess = netOutput.IndexOf(netOutput.Max());
+                var correctNumber = correctOutput.ToList().IndexOf(1);
+                if (netGuess.Equals(correctNumber))
                 {
-                    var image = validationSet[i];
-                    var netOutput = n.ff(image.Item1);
-                    var correctOutput = image.Item2;
-                    var netGuess = netOutput.IndexOf(netOutput.Max());
-                    var correctNumber = correctOutput.ToList().IndexOf(1);
-                    Console.WriteLine("N: " + netGuess + " \t C: " + correctNumber);
-                    if (netGuess.Equals(correctNumber))
-                    {
-                        numCorrect++;
-                    }
+                    numCorrect++;
                 }
-
-                #endregion
-
-                Console.ReadKey();
-                Console.ReadKey();
+            }
+            return numCorrect / 20;
         }
 
         //can the network predict y > x^2?
