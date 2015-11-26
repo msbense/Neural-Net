@@ -10,7 +10,6 @@ namespace nnn
     {
         public List<double> InputWeights { get; set; }
         public double Error { get; set; } 
-        public double SumError { get; set; }
         public double Bias { get; set; }
         public double Activation { get; set; }
         public double Input { get; set; }

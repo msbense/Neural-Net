@@ -11,7 +11,6 @@ namespace nnn
         public List<List<Neuron>> Neurons;
         public double LearningConstant { get; set; }
         public double RegularizationConstant { get; set; }
-        public int miniBatchSize { get; set; }
         public double totalTrainingSize { get; set; }
         public Network(params int[] structure)
         {
@@ -78,7 +77,6 @@ namespace nnn
                 Neuron n = Neurons[Neurons.Count - 1][neuronIndex];
                 
                 n.Error = cep(n.Activation, correct[neuronIndex]);
-                n.SumError += n.Error;
                 n.Activation = 0;
                 n.Input = 0;
             }
@@ -98,49 +96,28 @@ namespace nnn
                         weightsTimesErrors += n.InputWeights[neuronIndex] * n.Error;
                     }
                     curr.Error = weightsTimesErrors * sigmaPrime(curr.Input);
-                    curr.SumError += curr.Error;
                     curr.Activation = 0;
                     curr.Input = 0;
+                }
+            }
+
+            for (int layerIndex = 1; layerIndex < Neurons.Count; layerIndex++)
+            {
+                for (int neuronIndex = 0; neuronIndex < Neurons[layerIndex].Count; neuronIndex++)
+                {
+                    Neuron n = Neurons[layerIndex][neuronIndex];
+
+                    n.Bias -= LearningConstant * n.Error;
+                    for (int weightIndex = 0; weightIndex < n.InputWeights.Count; weightIndex++)
+                    {
+                        n.InputWeights[weightIndex] = n.InputWeights[weightIndex] * (1 - ((LearningConstant * RegularizationConstant) / totalTrainingSize)) - LearningConstant * n.Error * Neurons[layerIndex - 1][weightIndex].Activation;
+                    }
                 }
             }
 
             
         }
 
-        public void averageErrorsAndCorrect()
-        {
-
-            foreach (List<Neuron> layer in Neurons)
-            {
-                foreach (Neuron n in layer)
-                {
-                    n.SumError /= miniBatchSize;
-                }
-            }
-
-            for (int layerIndex = 1; layerIndex < Neurons.Count; layerIndex++) 
-            {
-                for (int neuronIndex = 0; neuronIndex < Neurons[layerIndex].Count; neuronIndex++)
-                {
-                    Neuron n = Neurons[layerIndex][neuronIndex];
-
-                    n.Bias -= LearningConstant * n.SumError;
-                    for (int weightIndex = 0; weightIndex < n.InputWeights.Count; weightIndex++)
-                    {
-
-                        n.InputWeights[weightIndex] = n.InputWeights[weightIndex] * (1 - ((LearningConstant * RegularizationConstant) / totalTrainingSize)) - LearningConstant * n.SumError * Neurons[layerIndex - 1][weightIndex].Activation;
-                    }
-                }
-            }
-
-            foreach (List<Neuron> layer in Neurons)
-            {
-                foreach (Neuron n in layer)
-                {
-                    n.SumError = 0;
-                }
-            }
-        }
 
         /// <summary>
         /// Cost Prime, derivative of the cost Function

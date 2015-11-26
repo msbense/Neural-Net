@@ -19,7 +19,6 @@ namespace nnn
                     LearningConstant = .015,
                     RegularizationConstant = 0,
                     totalTrainingSize = 10000,
-                    miniBatchSize = 10,
                 };
 
                 RunBasic(n);
@@ -32,10 +31,7 @@ namespace nnn
                 {
                     var guess = n.ff(image.Item1);
                     n.bp(guess, new List<double>(image.Item2));
-                    if (inputSet >= n.miniBatchSize && inputSet % n.miniBatchSize == 0)
-                    {
-                        n.averageErrorsAndCorrect();
-                    }
+                    
                     //Console.WriteLine(inputSet++);
                 }
                 #endregion
@@ -79,10 +75,6 @@ namespace nnn
 
                 n.bp(n.ff(inputs), correctOutputs);
 
-                if (i > n.miniBatchSize && i % n.miniBatchSize == 0)
-                {
-                    n.averageErrorsAndCorrect();
-                }
             }
             #endregion
 
