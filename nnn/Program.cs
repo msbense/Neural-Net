@@ -21,6 +21,8 @@ namespace nnn
                 totalTrainingSize = 60000,
             };
 
+            RunBasic();
+            return;
             //Training
             var dataSet = MNISTProc.getImageData(@"..\..\data\train-images.idx3-ubyte", @"..\..\data\train-labels.idx1-ubyte", true);
             double currentPercentCorrect = 0;
@@ -63,11 +65,11 @@ namespace nnn
         //can the network predict y > x^2?
         public static void RunBasic()
         {
-            Network n = new Network(2, 5, 1)
+            Network n = new Network(2, 10, 1)
             {
-                LearningConstant = 1,
+                LearningConstant = .015,
                 RegularizationConstant = 0,
-                totalTrainingSize = 10000,
+                totalTrainingSize = 200,
             };
 
             Random rng = new Random();
