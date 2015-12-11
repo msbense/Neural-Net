@@ -14,9 +14,9 @@ namespace nnn
         static void Main(string[] args)
         {
             
-            Network n = new Network(784, 50, 10)
+            Network n = new Network(784, 100, 10)
             {
-                LearningConstant = 3,
+                LearningConstant = .3,
                 RegularizationConstant = 0,
                 totalTrainingSize = 60000,
             };
