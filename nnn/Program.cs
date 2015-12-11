@@ -67,9 +67,10 @@ namespace nnn
         {
             Network n = new Network(2, 10, 1)
             {
-                LearningConstant = .015,
+                LearningConstant = .03,
                 RegularizationConstant = 0,
                 totalTrainingSize = 200,
+                miniBatchSize = 20
             };
 
             Random rng = new Random();
@@ -97,6 +98,10 @@ namespace nnn
                     var inputs = allInputs[i];
                     var correctOutputs = allOutputs[i];
                     n.bp(n.ff(inputs), correctOutputs);
+                    if (i % n.miniBatchSize == 0 && i != 0) 
+                    {
+                        n.averageAndCorrect();
+                    }
                 }
                 currentPercentCorrect = RunBasicValidation(n);
                 Console.WriteLine("Epoch " + currentEpoch + ": " + currentPercentCorrect);

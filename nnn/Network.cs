@@ -12,6 +12,7 @@ namespace nnn
         public double LearningConstant { get; set; }
         public double RegularizationConstant { get; set; }
         public double totalTrainingSize { get; set; }
+        public double miniBatchSize { get; set; }
         public Network(params int[] structure)
         {
             Neurons = new List<List<Neuron>>();
@@ -77,6 +78,7 @@ namespace nnn
                 Neuron n = Neurons[Neurons.Count - 1][neuronIndex];
                 
                 n.Error = cep(n.Activation, correct[neuronIndex]);
+                n.SumError += n.Error;
                 n.Activation = 0;
                 n.Input = 0;
             }
@@ -96,11 +98,25 @@ namespace nnn
                         weightsTimesErrors += n.InputWeights[neuronIndex] * n.Error;
                     }
                     curr.Error = weightsTimesErrors * sigmaPrime(curr.Input);
+                    curr.SumError += curr.Error;
                     curr.Activation = 0;
                     curr.Input = 0;
                 }
             }
 
+            
+        }
+
+        public void averageAndCorrect()
+        {
+            foreach (List<Neuron> layer in Neurons)
+            {
+                foreach (Neuron n in layer)
+                {
+                    n.Error = n.SumError / miniBatchSize;
+                    n.SumError = 0;
+                }
+            }
             for (int layerIndex = 1; layerIndex < Neurons.Count; layerIndex++)
             {
                 for (int neuronIndex = 0; neuronIndex < Neurons[layerIndex].Count; neuronIndex++)
@@ -115,9 +131,7 @@ namespace nnn
                 }
             }
 
-            
         }
-
 
         /// <summary>
         /// Cost Prime, derivative of the cost Function

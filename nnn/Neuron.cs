@@ -13,6 +13,7 @@ namespace nnn
         public double Bias { get; set; }
         public double Activation { get; set; }
         public double Input { get; set; }
+        public double SumError { get; set; }
         public Neuron(int numWeights) 
         {
             Random rng = new Random();
