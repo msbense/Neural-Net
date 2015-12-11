@@ -61,8 +61,15 @@ namespace nnn
         }
 
         //can the network predict y > x^2?
-        public static void RunBasic(Network n)
+        public static void RunBasic()
         {
+            Network n = new Network(2, 5, 1)
+            {
+                LearningConstant = 1,
+                RegularizationConstant = 0,
+                totalTrainingSize = 10000,
+            };
+
             Random rng = new Random();
            
             var allInputs = new List<List<double>>();
