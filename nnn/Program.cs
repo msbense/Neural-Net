@@ -19,10 +19,9 @@ namespace nnn
                 LearningConstant = .3,
                 RegularizationConstant = 0,
                 totalTrainingSize = 60000,
+                miniBatchSize = 20
             };
 
-            RunBasic();
-            return;
             //Training
             var dataSet = MNISTProc.getImageData(@"..\..\data\train-images.idx3-ubyte", @"..\..\data\train-labels.idx1-ubyte", true);
             double currentPercentCorrect = 0;
@@ -33,6 +32,15 @@ namespace nnn
                 {
                     var image = dataSet[inputSet];
                     n.bp(n.ff(image.Item1), new List<double>(image.Item2));
+                    if (inputSet % n.miniBatchSize == 0 && inputSet != 0)
+                    {
+                        n.averageAndCorrect();
+                    }
+                    if (inputSet % 1000 == 0)
+                    {
+
+                        Console.WriteLine(inputSet + " " + RunMNISTValidation(n));
+                    }
                 }
                 currentPercentCorrect = RunMNISTValidation(n);
                 Console.WriteLine("Epoch " + epoch + ": " + currentPercentCorrect);
