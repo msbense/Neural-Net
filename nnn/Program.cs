@@ -14,16 +14,16 @@ namespace nnn
         static void Main(string[] args)
         {
             
-            Network n = new Network(784, 100, 10)
+            Network n = new Network(784, 40, 10)
             {
-                LearningConstant = .3,
+                LearningConstant = .0005,
                 RegularizationConstant = 0,
                 totalTrainingSize = 60000,
-                miniBatchSize = 20
+                miniBatchSize = 5
             };
-
             //Training
             var dataSet = MNISTProc.getImageData(@"..\..\data\train-images.idx3-ubyte", @"..\..\data\train-labels.idx1-ubyte", true);
+            
             double currentPercentCorrect = 0;
             int epoch = 1;
             while (currentPercentCorrect < .7)
@@ -35,10 +35,10 @@ namespace nnn
                     if (inputSet % n.miniBatchSize == 0 && inputSet != 0)
                     {
                         n.averageAndCorrect();
+                        //RunMNISTValidation(n);
                     }
                     if (inputSet % 1000 == 0)
                     {
-
                         Console.WriteLine(inputSet + " " + RunMNISTValidation(n));
                     }
                 }
@@ -54,7 +54,9 @@ namespace nnn
         public static double RunMNISTValidation(Network n)
         {
             var validationSet = MNISTProc.getImageData(@"..\..\data\t10k-images.idx3-ubyte", @"..\..\data\t10k-labels.idx1-ubyte", false);
-            int numCorrect = 0;
+        
+
+            double numCorrect = 0;
             for (int i = 0; i < 20; i++)
             {
                 var image = validationSet[i];
@@ -62,6 +64,7 @@ namespace nnn
                 var correctOutput = image.Item2;
                 var netGuess = netOutput.IndexOf(netOutput.Max());
                 var correctNumber = correctOutput.ToList().IndexOf(1);
+                Console.WriteLine(correctNumber + " " + netGuess + " " + netOutput[0] + " " + netOutput[1] + " " + netOutput[2]);
                 if (netGuess.Equals(correctNumber))
                 {
                     numCorrect++;
@@ -75,9 +78,9 @@ namespace nnn
         {
             Network n = new Network(2, 10, 1)
             {
-                LearningConstant = .03,
+                LearningConstant = .3,
                 RegularizationConstant = 0,
-                totalTrainingSize = 200,
+                totalTrainingSize = 2000,
                 miniBatchSize = 20
             };
 

@@ -14,9 +14,8 @@ namespace nnn
         public double Activation { get; set; }
         public double Input { get; set; }
         public double SumError { get; set; }
-        public Neuron(int numWeights) 
+        public Neuron(int numWeights, Random rng) 
         {
-            Random rng = new Random();
             InputWeights = new List<double>();
             for (int i = 0; i < numWeights; i++)
             {

@@ -15,19 +15,20 @@ namespace nnn
         public double miniBatchSize { get; set; }
         public Network(params int[] structure)
         {
+            Random rng = new Random();
             Neurons = new List<List<Neuron>>();
             for (int layerIndex = 0; layerIndex < structure.Length; layerIndex++)
             {
                 Neurons.Add(new List<Neuron>());
                 for (int NeuronIndex = 0; NeuronIndex < structure[layerIndex]; NeuronIndex++)
                 {
-                    Neuron n = new Neuron((layerIndex > 0) ? Neurons[layerIndex - 1].Count : 0);
+                    Neuron n = new Neuron((layerIndex > 0) ? Neurons[layerIndex - 1].Count : 0, rng);
                     Neurons[layerIndex].Add(n);
                 }
             }
         }
 
-        public List<double> ff(List<double> inputs) 
+        public List<double> ff(List<double> inputs)
         {
             if (inputs.Count != Neurons[0].Count)
             {
@@ -44,7 +45,7 @@ namespace nnn
                 for (int neuronIndex = 0; neuronIndex < Neurons[layerIndex].Count; neuronIndex++)
                 {
                     Neuron n = Neurons[layerIndex][neuronIndex];
-                    
+
                     double weightsTimesInputs = 0;
                     for (int weightIndex = 0; weightIndex < n.InputWeights.Count; weightIndex++) //Sum all weights * 
                     {
@@ -76,11 +77,10 @@ namespace nnn
             for (int neuronIndex = 0; neuronIndex < Neurons[Neurons.Count - 1].Count; neuronIndex++) //calculate error in final layer
             {
                 Neuron n = Neurons[Neurons.Count - 1][neuronIndex];
-                
+
                 n.Error = cep(n.Activation, correct[neuronIndex]);
                 n.SumError += n.Error;
-                n.Activation = 0;
-                n.Input = 0;
+
             }
 
 
@@ -89,9 +89,9 @@ namespace nnn
                 for (int neuronIndex = 0; neuronIndex < Neurons[layerIndex].Count; neuronIndex++)
                 {
                     Neuron curr = Neurons[layerIndex][neuronIndex];
-                    
+
                     double weightsTimesErrors = 0;
-                    for (int weightIndex = 0; weightIndex < Neurons[layerIndex + 1].Count; weightIndex++) 
+                    for (int weightIndex = 0; weightIndex < Neurons[layerIndex + 1].Count; weightIndex++)
                     {
                         Neuron n = Neurons[layerIndex + 1][weightIndex];
 
@@ -99,12 +99,11 @@ namespace nnn
                     }
                     curr.Error = weightsTimesErrors * sigmaPrime(curr.Input);
                     curr.SumError += curr.Error;
-                    curr.Activation = 0;
-                    curr.Input = 0;
+
                 }
             }
 
-            
+
         }
 
         public void averageAndCorrect()
@@ -156,11 +155,21 @@ namespace nnn
         /// <summary>
         /// Sigmoid function
         /// </summary>
-        public double sigma(double value) { return (1/(1+Math.Exp(-value))); }
+        public double sigma(double value) { return (1 / (1 + Math.Exp(-value))); }
         /// <summary>
         /// The derivative of the Sigmoid function
         /// </summary>
-        public double sigmaPrime(double value) { return (Math.Exp(-value)/(Math.Pow((1+Math.Exp(-value)), 2))); }
+        public double sigmaPrime(double value)
+        {
+            if (double.IsInfinity(Math.Pow((1 + Math.Exp(-value)), 2)))
+            {
+                return 0;
+            }
+            else
+            {
+                return (Math.Exp(-value) / (Math.Pow((1 + Math.Exp(-value)), 2)));
+            }
 
+        }
     }
 }
