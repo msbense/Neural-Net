@@ -17,16 +17,17 @@ namespace nnn
             Network n = new Network(784, 40, 10)
             {
                 LearningConstant = .0005,
-                RegularizationConstant = 0,
+                RegularizationConstant = 1,
                 totalTrainingSize = 60000,
                 miniBatchSize = 5
             };
+
             //Training
             var dataSet = MNISTProc.getImageData(@"..\..\data\train-images.idx3-ubyte", @"..\..\data\train-labels.idx1-ubyte", true);
             
             double currentPercentCorrect = 0;
             int epoch = 1;
-            while (currentPercentCorrect < .7)
+            while (currentPercentCorrect < 1)
             {
                 for (int inputSet = 0; inputSet < dataSet.Count; inputSet++)
                 {
@@ -35,11 +36,6 @@ namespace nnn
                     if (inputSet % n.miniBatchSize == 0 && inputSet != 0)
                     {
                         n.averageAndCorrect();
-                        //RunMNISTValidation(n);
-                    }
-                    if (inputSet % 1000 == 0)
-                    {
-                        Console.WriteLine(inputSet + " " + RunMNISTValidation(n));
                     }
                 }
                 currentPercentCorrect = RunMNISTValidation(n);
@@ -64,7 +60,6 @@ namespace nnn
                 var correctOutput = image.Item2;
                 var netGuess = netOutput.IndexOf(netOutput.Max());
                 var correctNumber = correctOutput.ToList().IndexOf(1);
-                Console.WriteLine(correctNumber + " " + netGuess + " " + netOutput[0] + " " + netOutput[1] + " " + netOutput[2]);
                 if (netGuess.Equals(correctNumber))
                 {
                     numCorrect++;
@@ -115,7 +110,6 @@ namespace nnn
                     }
                 }
                 currentPercentCorrect = RunBasicValidation(n);
-                Console.WriteLine("Epoch " + currentEpoch + ": " + currentPercentCorrect);
                 currentEpoch++;
             }
             Console.ReadKey();
