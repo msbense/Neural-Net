@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 namespace nnn
 {
-    public class Network
+    /// <summary>
+    /// Feedfoward neural network
+    /// </summary>
+    public class FeedFowardNetwork
     {
         public List<List<Neuron>> Neurons;
         public double LearningConstant { get; set; }
         public double RegularizationConstant { get; set; }
         public double totalTrainingSize { get; set; }
         public double miniBatchSize { get; set; }
-        public Network(params int[] structure)
+        public FeedFowardNetwork(params int[] structure)
         {
             Random rng = new Random();
             Neurons = new List<List<Neuron>>();

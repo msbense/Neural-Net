@@ -14,7 +14,7 @@ namespace nnn
         static void Main(string[] args)
         {
             
-            Network n = new Network(784, 40, 10)
+            FeedFowardNetwork n = new FeedFowardNetwork(784, 40, 10)
             {
                 LearningConstant = .0005,
                 RegularizationConstant = 1,
@@ -47,7 +47,7 @@ namespace nnn
             Console.ReadKey();
         }
 
-        public static double RunMNISTValidation(Network n)
+        public static double RunMNISTValidation(FeedFowardNetwork n)
         {
             var validationSet = MNISTProc.getImageData(@"..\..\data\t10k-images.idx3-ubyte", @"..\..\data\t10k-labels.idx1-ubyte", false);
         
@@ -71,7 +71,7 @@ namespace nnn
         //can the network predict y > x^2?
         public static void RunBasic()
         {
-            Network n = new Network(2, 10, 1)
+            FeedFowardNetwork n = new FeedFowardNetwork(2, 10, 1)
             {
                 LearningConstant = .3,
                 RegularizationConstant = 0,
@@ -116,7 +116,7 @@ namespace nnn
             Console.ReadKey();
         }
 
-        public static double RunBasicValidation(Network n)
+        public static double RunBasicValidation(FeedFowardNetwork n)
         {
             Random rng = new Random();
             double percentCorrect = 0;
