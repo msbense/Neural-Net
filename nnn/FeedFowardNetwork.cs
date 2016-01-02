@@ -122,7 +122,7 @@ namespace nnn
                     n.Bias -= LearningConstant * n.Error;
                     for (int weightIndex = 0; weightIndex < n.InputWeights.Count; weightIndex++)
                     {
-                        n.InputWeights[weightIndex] = n.InputWeights[weightIndex] * (1 - ((LearningConstant * RegularizationConstant) / totalTrainingSize)) - LearningConstant * n.Error * Neurons[layerIndex - 1][weightIndex].Activation;
+                        n.InputWeights[weightIndex] = n.InputWeights[weightIndex] - LearningConstant * n.Error * Neurons[layerIndex - 1][weightIndex].Activation;
                     }
                 }
             }

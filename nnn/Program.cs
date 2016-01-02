@@ -17,7 +17,6 @@ namespace nnn
             FeedFowardNetwork n = new FeedFowardNetwork(784, 40, 10)
             {
                 LearningConstant = .0005,
-                RegularizationConstant = 1,
                 totalTrainingSize = 60000,
                 miniBatchSize = 5
             };
@@ -74,7 +73,6 @@ namespace nnn
             FeedFowardNetwork n = new FeedFowardNetwork(2, 10, 1)
             {
                 LearningConstant = .3,
-                RegularizationConstant = 0,
                 totalTrainingSize = 2000,
                 miniBatchSize = 20
             };

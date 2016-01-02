@@ -9,7 +9,6 @@ namespace nnn
     public abstract class NeuralNetwork
     {
         public double LearningConstant { get; set; }
-        public double RegularizationConstant { get; set; }
         public double totalTrainingSize { get; set; }
         public double miniBatchSize { get; set; }
 
@@ -25,10 +24,6 @@ namespace nnn
         /// Cross Entropy cost function
         /// </summary>
         public double ce(double value, double correct) { return (-correct * Math.Log(value)) - ((1 - correct) * Math.Log(1 - value)); }
-        /// <summary>
-        /// Cross Entropy cost function with regularization
-        /// </summary>
-        public double ceRegularized(double value, double correct) { return (-correct * Math.Log(value)) - ((1 - correct) * Math.Log(1 - value)) + ((RegularizationConstant / (2 * totalTrainingSize)) * Neurons.Sum((l) => { return l.Sum((n) => { return n.InputWeights.Sum(); }); })); }
         /// <summary>
         /// The Cost function 
         /// </summary>
