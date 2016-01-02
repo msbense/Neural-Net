@@ -25,3 +25,8 @@ C:\Users\MSB1x_000\Documents\Visual Studio 2013\Projects\nnn\nnn\obj\Debug\nnn.c
 C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\nnn\bin\Debug\nnn.exe.config
 C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\nnn\obj\Debug\nnn.exe
 C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\nnn\obj\Debug\nnn.pdb
+C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\nnn\bin\Debug\nnn.exe
+C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\nnn\bin\Debug\nnn.pdb
+C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\nnn\bin\Debug\MathNet.Numerics.dll
+C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\nnn\bin\Debug\MathNet.Numerics.xml
+C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\nnn\obj\Debug\nnn.csprojResolveAssemblyReference.cache
