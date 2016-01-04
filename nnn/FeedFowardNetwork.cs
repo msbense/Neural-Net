@@ -25,13 +25,13 @@ namespace nnn
             }
         }
 
-        public List<double> ff(List<double> inputs)
+        public List<float> ff(List<float> inputs)
         {
             if (inputs.Count != Neurons[0].Count)
             {
                 throw new ArgumentException("Size of input array must equal number of input neurons");
             }
-            List<double> outputs = new List<double>();
+            List<float> outputs = new List<float>();
             for (int inputNeuronIndex = 0; inputNeuronIndex < Neurons[0].Count; inputNeuronIndex++)
             {
                 Neuron inputNeuron = Neurons[0][inputNeuronIndex];
@@ -43,7 +43,7 @@ namespace nnn
                 {
                     Neuron n = Neurons[layerIndex][neuronIndex];
 
-                    double weightsTimesInputs = 0;
+                    float weightsTimesInputs = 0;
                     for (int weightIndex = 0; weightIndex < n.InputWeights.Count; weightIndex++) //Sum all weights * 
                     {
                         weightsTimesInputs += this.Neurons[layerIndex - 1][weightIndex].Activation * n.InputWeights[weightIndex];
@@ -61,7 +61,7 @@ namespace nnn
             return outputs;
         }
 
-        public void bp(List<double> outputs, List<double> correct)
+        public void bp(List<float> outputs, List<float> correct)
         {
             if (outputs.Count != correct.Count)
             {
@@ -87,7 +87,7 @@ namespace nnn
                 {
                     Neuron curr = Neurons[layerIndex][neuronIndex];
 
-                    double weightsTimesErrors = 0;
+                    float weightsTimesErrors = 0;
                     for (int weightIndex = 0; weightIndex < Neurons[layerIndex + 1].Count; weightIndex++)
                     {
                         Neuron n = Neurons[layerIndex + 1][weightIndex];
