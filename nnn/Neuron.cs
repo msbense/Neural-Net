@@ -8,7 +8,7 @@ namespace nnn
 {
     public class Neuron
     {
-        public List<double> InputWeights { get; set; }
+        public double[] InputWeights { get; set; }
         public double Error { get; set; } 
         public double Bias { get; set; }
         public double Activation { get; set; }
@@ -16,10 +16,10 @@ namespace nnn
         public double SumError { get; set; }
         public Neuron(int numWeights, Random rng) 
         {
-            InputWeights = new List<double>();
+            InputWeights = new double[numWeights];
             for (int i = 0; i < numWeights; i++)
             {
-                InputWeights.Add(((rng.NextDouble() - .5) * 2) * (1/Math.Sqrt(numWeights))); 
+                InputWeights[i] = ((rng.NextDouble() - .5) * 2) * (1/Math.Sqrt(numWeights)); 
             }
             Bias = ((rng.NextDouble() - .5) * 2); 
             Activation = 0;

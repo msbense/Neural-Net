@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using System;
 using System.Collections.Generic;
 
 namespace nnn
@@ -9,7 +10,7 @@ namespace nnn
     public class FeedFowardNetwork : NeuralNetwork
     {
         public List<List<Neuron>> Neurons;
-
+        
         public FeedFowardNetwork(params int[] structure)
         {
             Random rng = new Random();
