@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using ManagedCuda;
+using ManagedCuda.VectorTypes;
 using System;
 using System.Collections.Generic;
 
@@ -10,9 +11,19 @@ namespace nnn
     public class FeedFowardNetwork : NeuralNetwork
     {
         public List<List<Neuron>> Neurons;
-        
-        public FeedFowardNetwork(params int[] structure)
+        public int[] Structure { get; set; }
+
+        List<double[][]> Weights; //Weights[layerIndex][neuronIndex][inputNeuronIndex]
+        List<double[]> Biases; //Biases[layerIndex][neuronIndex]                                //TODO Initialize these Lists
+        List<double[]> Inputs; 
+        List<double[]> Activations;
+        public FeedFowardNetwork(bool cudaEnabled, params int[] structure)
         {
+            Structure = structure;
+            if (cudaEnabled)
+            {
+                initializeCUDA();
+            }
             Random rng = new Random();
             Neurons = new List<List<Neuron>>();
             for (int layerIndex = 0; layerIndex < structure.Length; layerIndex++)
@@ -23,6 +34,24 @@ namespace nnn
                     Neuron n = new Neuron((layerIndex > 0) ? Neurons[layerIndex - 1].Count : 0, rng);
                     Neurons[layerIndex].Add(n);
                 }
+            }
+        }
+
+        private void initializeCUDA()
+        {
+            ParallelMethods.Initialize(Structure);
+        }
+
+        
+        public double[] ffParallel(double[] inputs)
+        {
+            for (int layerIndex = 0; layerIndex < Structure.Length - 1; layerIndex++)
+            {
+                CudaKernel ff = ParallelMethods.Kernels["FeedFoward"];
+                ff.GridDimensions = new dim3(Structure[layerIndex + 1]);
+                ff.GridDimensions = new dim3(Structure[layerIndex]);
+                ff.Run();
+                //TODO: Finish
             }
         }
 

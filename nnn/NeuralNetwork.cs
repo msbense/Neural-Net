@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using ManagedCuda;
 namespace nnn
 {
     public abstract class NeuralNetwork
     {
+        public CudaContext CudaCtx { get; set; }
         public double LearningConstant { get; set; }
         public double totalTrainingSize { get; set; }
         public double miniBatchSize { get; set; }

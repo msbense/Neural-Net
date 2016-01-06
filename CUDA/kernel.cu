@@ -14,10 +14,11 @@
 
 extern "C"
 {
-	__global__ void aKernal(int *a)
+	//Multiplies input vector by weight vector
+	__global__ void FeedFoward(int *a, int *b, int *o)
 	{
-		int i = threadIdx.x;
-		a[i] = i;
+		int nIdx = blockIdx.x;
+		int wIdx = threadIdx.x;
 	}
 }
 
