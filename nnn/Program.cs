@@ -24,18 +24,19 @@ namespace nnn
             //Training
             var dataSet = MNISTProc.getImageData(@"..\..\data\train-images.idx3-ubyte", @"..\..\data\train-labels.idx1-ubyte", true);
             
-            float currentPercentCorrect = 0;
+            double currentPercentCorrect = 0;
             int epoch = 1;
             while (currentPercentCorrect < 1)
             {
                 for (int inputSet = 0; inputSet < dataSet.Count; inputSet++)
                 {
                     var image = dataSet[inputSet];
-                    n.bp(n.ff(image.Item1), new List<float>(image.Item2));
+                    n.bp(n.ff(image.Item1), new List<double>(image.Item2));
                     if (inputSet % n.miniBatchSize == 0 && inputSet != 0)
                     {
                         n.averageAndCorrect();
                     }
+                    if (inputSet % 1000 == 0) Console.WriteLine(inputSet);
                 }
                 currentPercentCorrect = RunMNISTValidation(n);
                 Console.WriteLine("Epoch " + epoch + ": " + currentPercentCorrect);
@@ -46,13 +47,13 @@ namespace nnn
             Console.ReadKey();
         }
 
-        public static float RunMNISTValidation(FeedFowardNetwork n)
+        public static double RunMNISTValidation(FeedFowardNetwork n)
         {
             var validationSet = MNISTProc.getImageData(@"..\..\data\t10k-images.idx3-ubyte", @"..\..\data\t10k-labels.idx1-ubyte", false);
         
 
-            float numCorrect = 0;
-            for (int i = 0; i < 20; i++)
+            double numCorrect = 0;
+            for (int i = 0; i < 10000; i++)
             {
                 var image = validationSet[i];
                 var netOutput = n.ff(image.Item1);
@@ -64,7 +65,7 @@ namespace nnn
                     numCorrect++;
                 }
             }
-            return numCorrect / 20;
+            return numCorrect / 10000;
         }
 
         //can the network predict y > x^2?
@@ -79,21 +80,21 @@ namespace nnn
 
             Random rng = new Random();
            
-            var allInputs = new List<List<float>>();
-            var allOutputs = new List<List<float>>();
+            var allInputs = new List<List<double>>();
+            var allOutputs = new List<List<double>>();
             for (int i = 0; i < n.totalTrainingSize; i++)
             {
-                var inputs = new List<float>();
-                float x = rng.Next(0, 20);
-                float y = rng.Next(0, 266);
+                var inputs = new List<double>();
+                double x = rng.Next(0, 20);
+                double y = rng.Next(0, 266);
                 inputs.Add(x);
                 inputs.Add(y);
                 allInputs.Add(inputs);
-                var correctOutputs = new List<float>(new float[] { (Math.Pow(x, 2) < y) ? 1.0 : 0.0 });
+                var correctOutputs = new List<double>(new double[] { (Math.Pow(x, 2) < y) ? 1.0 : 0.0 });
                 allOutputs.Add(correctOutputs);
             }
 
-            float currentPercentCorrect = 0;
+            double currentPercentCorrect = 0;
             int currentEpoch = 1;
             while (currentPercentCorrect < .9) 
             {
@@ -114,15 +115,15 @@ namespace nnn
             Console.ReadKey();
         }
 
-        public static float RunBasicValidation(FeedFowardNetwork n)
+        public static double RunBasicValidation(FeedFowardNetwork n)
         {
             Random rng = new Random();
-            float percentCorrect = 0;
+            double percentCorrect = 0;
             for (int i = 0; i < 15; i++)
             {
-                var inputs = new List<float>();
-                float x = rng.Next(0, 20);
-                float y = rng.Next(0, 266);
+                var inputs = new List<double>();
+                double x = rng.Next(0, 20);
+                double y = rng.Next(0, 266);
                 inputs.Add(x);
                 inputs.Add(y);
                 var correctOutput = (Math.Pow(x, 2) < y) ? 1.0 : 0.0;

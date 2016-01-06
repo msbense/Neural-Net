@@ -9,8 +9,8 @@ namespace nnn
 {
     public class RecurrentNetwork : NeuralNetwork
     {
-        public Matrix<float> Weights { get; set; }
-        public Matrix<float> MyProperty { get; set; }
+        public Matrix<double> Weights { get; set; }
+        public Matrix<double> MyProperty { get; set; }
         public RecurrentNetwork()
         {
 

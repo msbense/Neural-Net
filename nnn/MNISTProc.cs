@@ -16,9 +16,9 @@ namespace nnn
         /// <param name="imagesPath">Path to the image data</param>
         /// <param name="labelPath"></param>
         /// <returns>A list of tuples containing the input data and the correct response</returns>
-        public static List<Tuple<List<float>, float[]>> getImageData(string imagesPath, string labelPath, bool train)
+        public static List<Tuple<List<double>, double[]>> getImageData(string imagesPath, string labelPath, bool train)
         {
-            var dataSet = new List<Tuple<List<float>, float[]>>();
+            var dataSet = new List<Tuple<List<double>, double[]>>();
 
             FileStream ifsLabels = new FileStream(labelPath, FileMode.Open); // test labels
             FileStream ifsImages =  new FileStream(imagesPath, FileMode.Open); // test images
@@ -37,19 +37,19 @@ namespace nnn
             // each test image
             for (int di = 0; di < (train ? 60000 : 10000); ++di)
             {
-                List<float> imageData = new List<float>();
+                List<double> imageData = new List<double>();
                 for (int i = 0; i < 28; ++i)
                 {
                     for (int j = 0; j < 28; ++j)
                     {
-                        float pixel = Convert.Tofloat(brImages.ReadByte());
+                        double pixel = Convert.ToDouble(brImages.ReadByte());
                         imageData.Add(pixel);   
                     }
                 }
-                float[] correct = new float[10];
+                double[] correct = new double[10];
                 int label = Convert.ToInt32(brLabels.ReadByte());
                 correct[label] = 1.0;
-                dataSet.Add(new Tuple<List<float>, float[]>(imageData, correct));
+                dataSet.Add(new Tuple<List<double>, double[]>(imageData, correct));
 
             } // each image
 
