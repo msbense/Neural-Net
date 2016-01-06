@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ManagedCuda;
+using ManagedCuda.BasicTypes;
+using ManagedCuda.VectorTypes;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -13,7 +16,6 @@ namespace nnn
     {
         static void Main(string[] args)
         {
-            
             FeedFowardNetwork n = new FeedFowardNetwork(784, 40, 10)
             {
                 LearningConstant = .0005,
