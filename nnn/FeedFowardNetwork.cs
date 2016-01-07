@@ -13,13 +13,37 @@ namespace nnn
         public List<List<Neuron>> Neurons;
         public int[] Structure { get; set; }
 
-        List<double[][]> Weights; //Weights[layerIndex][neuronIndex][inputNeuronIndex]
+        List<double[]> Weights; //Weights[layerIndex][neuronIndex * Structure[layerIndex] + inputNeuronIndex]
         List<double[]> Biases; //Biases[layerIndex][neuronIndex]                                //TODO Initialize these Lists
         List<double[]> Inputs; 
         List<double[]> Activations;
         public FeedFowardNetwork(bool cudaEnabled, params int[] structure)
         {
             Structure = structure;
+            Weights = new List<double[]>(Structure.Length);
+            for (int layerIndex = 0; layerIndex < Weights.Count; layerIndex++)
+            {
+                int numInputNeurons = (layerIndex > 0) ? Structure[layerIndex - 1] : 0;
+                Weights[layerIndex] = new double[Structure[layerIndex] * numInputNeurons];
+            }
+            Biases = new List<double[]>(Structure.Length);
+            for (int layerIndex = 0; layerIndex < Biases.Count; layerIndex++) 
+            {
+                Biases[layerIndex] = new double[Structure[layerIndex]];
+            }
+            
+            Inputs = new List<double[]>(Structure.Length);
+            for (int layerIndex = 0; layerIndex < Inputs.Count; layerIndex++) 
+            {
+                Inputs[layerIndex] = new double[Structure[layerIndex]];
+            }
+            
+            Activations = new List<double[]>(Structure.Length);
+            for (int layerIndex = 0; layerIndex < Activations.Count; layerIndex++) 
+            {
+                Activations[layerIndex] = new double[Structure[layerIndex]];
+            }
+            
             if (cudaEnabled)
             {
                 initializeCUDA();
@@ -45,13 +69,13 @@ namespace nnn
         
         public double[] ffParallel(double[] inputs)
         {
-            for (int layerIndex = 0; layerIndex < Structure.Length - 1; layerIndex++)
+            
+            for (int layerIndex = 1; layerIndex < Structure.Length; layerIndex++)
             {
                 CudaKernel ff = ParallelMethods.Kernels["FeedFoward"];
-                ff.GridDimensions = new dim3(Structure[layerIndex + 1]);
                 ff.GridDimensions = new dim3(Structure[layerIndex]);
+                ff.BlockDimensions = new dim3(Structure[layerIndex - 1]);
                 ff.Run();
-                //TODO: Finish
             }
         }
 
@@ -74,7 +98,7 @@ namespace nnn
                     Neuron n = Neurons[layerIndex][neuronIndex];
 
                     double weightsTimesInputs = 0;
-                    for (int weightIndex = 0; weightIndex < n.InputWeights.Count; weightIndex++) //Sum all weights * 
+                    for (int weightIndex = 0; weightIndex < n.InputWeights.Length; weightIndex++) //Sum all weights * 
                     {
                         weightsTimesInputs += this.Neurons[layerIndex - 1][weightIndex].Activation * n.InputWeights[weightIndex];
                     }
@@ -150,7 +174,7 @@ namespace nnn
                     Neuron n = Neurons[layerIndex][neuronIndex];
 
                     n.Bias -= LearningConstant * n.Error;
-                    for (int weightIndex = 0; weightIndex < n.InputWeights.Count; weightIndex++)
+                    for (int weightIndex = 0; weightIndex < n.InputWeights.Length; weightIndex++)
                     {
                         n.InputWeights[weightIndex] = n.InputWeights[weightIndex] - LearningConstant * n.Error * Neurons[layerIndex - 1][weightIndex].Activation;
                     }

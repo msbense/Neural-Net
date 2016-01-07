@@ -15,10 +15,11 @@
 extern "C"
 {
 	//Multiplies input vector by weight vector
-	__global__ void FeedFoward(int *a, int *b, int *o)
+	__global__ void FeedFoward(int *inputs, int *weightMatrix, int *activations)
 	{
-		int nIdx = blockIdx.x;
-		int wIdx = threadIdx.x;
+		int neuronIdx = blockIdx.x;
+		int weightIdx = threadIdx.x;
+
 	}
 }
 
