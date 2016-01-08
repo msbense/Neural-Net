@@ -79,7 +79,9 @@ namespace nnn
                 CudaDeviceVariable<double> d_weights = Weights[layerIndex];
                 CudaDeviceVariable<double> d_activations = new CudaDeviceVariable<double>(Activations[layerIndex].Length);
                 ff.Run(d_inputs.DevicePointer, d_weights.DevicePointer, d_activations.DevicePointer);
+                Activations[layerIndex] = d_activations;
             }
+            return Activations[Activations.Count - 1];
         }
 
         public List<double> ff(List<double> inputs)

@@ -4,7 +4,8 @@
 #include <builtin_types.h> 
 #include <vector_functions.h> 
 #include <device_atomic_functions.h>
-#include <device_atomic_functions.hpp>
+#include <device_double_functions.h>
+#include <math.h>
 
 #define _SIZE_T_DEFINED 
 #ifndef __CUDACC__ 
@@ -23,9 +24,26 @@ extern "C"
 		int inputNeuronIdx = threadIdx.x;
 		__shared__ double sum;
 		double result = weightMatrix[(neuronIdx * blockDim.x) + inputNeuronIdx] * inputs[inputNeuronIdx];
-	}	
-}
+		
+		//atomicAdd using doubles
+		unsigned long long int* address_as_ull = (unsigned long long int*) &sum;
+		unsigned long long int old = *address_as_ull, assumed;
+		do {
+			assumed = old;
+			old = atomicCAS(address_as_ull, assumed,
+				__double_as_longlong(result +
+				__longlong_as_double(assumed)));
+		} while (assumed != old);
+		__syncthreads();
 
+		if (inputNeuronIdx == 0) 
+		{
+			activations[neuronIdx] = (1/(1+exp(-sum)));
+		}
+	}
+
+	
+}
 int main()
 {
 	return 0;

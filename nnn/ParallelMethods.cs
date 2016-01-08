@@ -19,7 +19,7 @@ namespace nnn
         {
             CudaCtx = new CudaContext();
             Module = CudaCtx.LoadModule(@"..\..\..\CUDA\Debug\kernel.ptx");
-            Kernels.Add("FeedFoward", new CudaKernel("multiplyWeights", Module, CudaCtx));
+            Kernels.Add("FeedFoward", new CudaKernel("FeedFoward", Module, CudaCtx));
         }
     }
 }

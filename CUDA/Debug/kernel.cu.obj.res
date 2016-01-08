@@ -1,1 +1,0 @@
--nologo -c -TP /EHsc /W3 /nologo /Od /Zi /RTC1 /MDd -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/include" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/include" "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin/../include"   -EHsc -Zi "Debug/kernel.cu.cpp.ii" 
