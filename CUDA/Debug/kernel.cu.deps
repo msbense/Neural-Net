@@ -388,3 +388,7 @@ c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\surface_types.h
 c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\texture_types.h
 c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\vector_types.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\vector_functions.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\sm_20_atomic_functions.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\sm_20_atomic_functions.hpp
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_atomic_functions.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_atomic_functions.hpp

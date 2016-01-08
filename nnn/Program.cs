@@ -16,7 +16,7 @@ namespace nnn
     {
         static void Main(string[] args)
         {
-            FeedFowardNetwork n = new FeedFowardNetwork(784, 40, 10)
+            FeedFowardNetwork n = new FeedFowardNetwork(true, 784, 40, 10)
             {
                 LearningConstant = .0005,
                 totalTrainingSize = 60000,
@@ -73,7 +73,7 @@ namespace nnn
         //can the network predict y > x^2?
         public static void RunBasic()
         {
-            FeedFowardNetwork n = new FeedFowardNetwork(2, 10, 1)
+            FeedFowardNetwork n = new FeedFowardNetwork(true, 2, 10, 1)
             {
                 LearningConstant = .3,
                 totalTrainingSize = 2000,

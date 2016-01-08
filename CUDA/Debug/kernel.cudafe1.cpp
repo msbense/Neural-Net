@@ -79309,29 +79309,33 @@ extern "C" { CUresult __stdcall cuGraphicsMapResources(unsigned count, CUgraphic
 extern "C" { CUresult __stdcall cuGraphicsUnmapResources(unsigned count, CUgraphicsResource * resources, CUstream hStream); } 
 #line 10500
 extern "C" { CUresult __stdcall cuGetExportTable(const void ** ppExportTable, const CUuuid * pExportTableId); } 
-#line 17 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-extern "C" {  __noinline__ void aKernal(int a[]) ;
+#line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+extern "C" {  __noinline__ void FeedFoward(int *inputs, int *weightMatrix, int *activations, int numInputNeurons) ;
 #if 0
-#line 18
+#line 23
 { 
-#line 19
-int i = __device_builtin_variable_threadIdx.x; 
-#line 20
-(a[i])++; 
-#line 21
+#line 24
+int neuronIdx = __device_builtin_variable_blockIdx.x; 
+#line 25
+int inputNeuronIdx = __device_builtin_variable_threadIdx.x; 
+#line 26
+static double sum; 
+#line 27
+double result = (weightMatrix[(neuronIdx * (__device_builtin_variable_blockDim.x)) + inputNeuronIdx]) * (inputs[inputNeuronIdx]); 
+#line 29
 } 
 #endif
 } 
-#line 24 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 32 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 int main() 
-#line 25
+#line 33
 { 
-#line 26
+#line 34
 return 0; 
-#line 27
+#line 35
 } 
 #line 1 "kernel.cudafe1.stub.c"
-#define _NV_ANON_NAMESPACE _GLOBAL__N__14_kernel_cpp1_ii_aKernal
+#define _NV_ANON_NAMESPACE _GLOBAL__N__14_kernel_cpp1_ii_ab6093b9
 #line 1 "kernel.cudafe1.stub.c"
 #include "kernel.cudafe1.stub.c"
 #line 1 "kernel.cudafe1.stub.c"

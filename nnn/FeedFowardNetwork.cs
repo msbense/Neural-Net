@@ -69,13 +69,16 @@ namespace nnn
         
         public double[] ffParallel(double[] inputs)
         {
-            
+            Activations[0] = inputs;
             for (int layerIndex = 1; layerIndex < Structure.Length; layerIndex++)
             {
                 CudaKernel ff = ParallelMethods.Kernels["FeedFoward"];
                 ff.GridDimensions = new dim3(Structure[layerIndex]);
                 ff.BlockDimensions = new dim3(Structure[layerIndex - 1]);
-                ff.Run();
+                CudaDeviceVariable<double> d_inputs = Activations[layerIndex - 1];
+                CudaDeviceVariable<double> d_weights = Weights[layerIndex];
+                CudaDeviceVariable<double> d_activations = new CudaDeviceVariable<double>(Activations[layerIndex].Length);
+                ff.Run(d_inputs.DevicePointer, d_weights.DevicePointer, d_activations.DevicePointer);
             }
         }
 

@@ -9540,8 +9540,8 @@ int  extern const warpSize;
 #line 149 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\crt\\storage_class.h"
 #line 266 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v7.5\\include\\crt/device_runtime.h"
 #line 498 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\crtdefs.h"
-#line 17 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__attribute__((global)) __attribute__((__used__)) extern void aKernal(int *);
+#line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__attribute__((global)) __attribute__((__used__)) extern void FeedFoward(int *, int *, int *, int);
 #line 1 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v7.5\\include\\common_functions.h"
 
 
@@ -9763,7 +9763,236 @@ __attribute__((global)) __attribute__((__used__)) extern void aKernal(int *);
 
 
 
+#line 1 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\cuda_device_runtime_api.h"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct cudaFuncAttributes;
+
+__attribute__((device)) __attribute__((nv_weak)) cudaError_t cudaMalloc(void **p, size_t s) 
+{ 
+  return cudaErrorUnknown;
+}
+
+__attribute__((device)) __attribute__((nv_weak)) cudaError_t cudaFuncGetAttributes(struct cudaFuncAttributes *p, const void *c) 
+{ 
+  return cudaErrorUnknown;
+}
+
+__attribute__((device)) __attribute__((nv_weak)) cudaError_t cudaDeviceGetAttribute(int *value, enum cudaDeviceAttr attr, int device)
+{
+  return cudaErrorUnknown;
+}
+
+__attribute__((device)) __attribute__((nv_weak)) cudaError_t cudaGetDevice(int *device)
+{
+  return cudaErrorUnknown;
+}
+
+__attribute__((device)) __attribute__((nv_weak)) cudaError_t cudaOccupancyMaxActiveBlocksPerMultiprocessor(int *numBlocks, const void *func, int blockSize, size_t dynamicSmemSize)
+{
+  return cudaErrorUnknown;
+}
+
+__attribute__((device)) __attribute__((nv_weak)) cudaError_t cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int *numBlocks, const void *func, int blockSize, size_t dynamicSmemSize, unsigned int flags)
+{
+  return cudaErrorUnknown;
+}
+
+#line 95 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\cuda_device_runtime_api.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 227 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\cuda_device_runtime_api.h"
+
+#line 229 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\cuda_device_runtime_api.h"
+#line 222 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v7.5\\include\\common_functions.h"
 #line 223 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v7.5\\include\\common_functions.h"
 
 #line 1 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\math_functions.h"
@@ -38125,11 +38354,11 @@ static __inline__ __attribute__((always_inline)) unsigned int __vaddss2 (unsigne
     ahi = (int)((a & 0xffff0000U));
     bhi = (int)((b & 0xffff0000U));
 
-    alo = (int)(a << 16);
-    blo = (int)(b << 16);
 
 
-
+#line 1863 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
+    asm ("shf.l.clamp.b32 %0,0,%1,16;" : "=r"(alo) : "r"(a));
+    asm ("shf.l.clamp.b32 %0,0,%1,16;" : "=r"(blo) : "r"(b));
 #line 1866 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
     asm ("add.sat.s32 %0,%1,%2;" : "=r"(rlo) : "r"(alo), "r"(blo));
     asm ("add.sat.s32 %0,%1,%2;" : "=r"(rhi) : "r"(ahi), "r"(bhi));
@@ -38150,11 +38379,11 @@ static __inline__ __attribute__((always_inline)) unsigned int __vaddus2 (unsigne
          "and.b32     %0, %4, 0xffff;    \n\t"
          "and.b32     %1, %5, 0xffff;    \n\t"
 
-         "shr.u32     %2, %4, 16;        \n\t"
-         "shr.u32     %3, %5, 16;        \n\t"
 
 
-
+#line 1888 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
+         "shf.r.clamp.b32  %2, %4, 0, 16;\n\t"
+         "shf.r.clamp.b32  %3, %5, 0, 16;\n\t"
 #line 1891 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
          "}"
          : "=r"(alo), "=r"(blo), "=r"(ahi), "=r"(bhi) 
@@ -38774,9 +39003,9 @@ static __inline__ __attribute__((always_inline)) unsigned int __vsadu2(unsigned 
     u = u - v;          
     t = t - s;          
 
-    asm ("shr.u32 %0,%0,16;" : "+r"(t));
 
-
+#line 2511 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
+    asm ("shf.r.clamp.b32  %0,%0,0,16;" : "+r"(t));
 #line 2513 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
     r = t + u;          
 #line 2515 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
@@ -38810,11 +39039,11 @@ static __inline__ __attribute__((always_inline)) unsigned int __vsubss2 (unsigne
     ahi = (int)((a & 0xffff0000U));
     bhi = (int)((b & 0xffff0000U));
 
-    asm ("prmt.b32 %0,%1,0,0x1044;" : "=r"(alo) : "r"(a));
-    asm ("prmt.b32 %0,%1,0,0x1044;" : "=r"(blo) : "r"(b));
 
 
-
+#line 2548 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
+    asm ("shf.l.clamp.b32 %0,0,%1,16;" : "=r"(alo) : "r"(a));
+    asm ("shf.l.clamp.b32 %0,0,%1,16;" : "=r"(blo) : "r"(b));
 #line 2551 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
     asm ("sub.sat.s32 %0,%1,%2;" : "=r"(rlo) : "r"(alo), "r"(blo));
     asm ("sub.sat.s32 %0,%1,%2;" : "=r"(rhi) : "r"(ahi), "r"(bhi));
@@ -38835,11 +39064,11 @@ static __inline__ __attribute__((always_inline)) unsigned int __vsubus2 (unsigne
          "and.b32     %0, %4, 0xffff;    \n\t"
          "and.b32     %1, %5, 0xffff;    \n\t"
 
-         "shr.u32     %2, %4, 16;        \n\t"
-         "shr.u32     %3, %5, 16;        \n\t"
 
 
-
+#line 2573 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
+         "shf.r.clamp.b32  %2, %4, 0, 16;\n\t"
+         "shf.r.clamp.b32  %3, %5, 0, 16;\n\t"
 #line 2576 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
          "}"
          : "=r"(alo), "=r"(blo), "=r"(ahi), "=r"(bhi) 
@@ -39386,14 +39615,14 @@ static __inline__ __attribute__((always_inline)) unsigned int __vabsdiffu4(unsig
 {
     unsigned int r, s;
 
+    s = 0;
+    asm ("vabsdiff4.u32.u32.u32 %0,%1,%2,%3;" : "=r"(r) :"r"(a),"r"(b),"r"(s));
 
 
-#line 3124 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
-    s = __vcmpgeu4 (a, b);
-    r = a ^ b;          
-    s = (r & s) ^ b;    
-    r = s ^ r;          
-    r = s - r;          
+
+
+
+
 #line 3130 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
     return r;           
 }
@@ -39679,13 +39908,13 @@ static __inline__ __attribute__((always_inline)) unsigned int __vsadu4(unsigned 
 {
     unsigned int r, s;
 
+    s = 0;
+    asm("vabsdiff4.u32.u32.u32.add %0,%1,%2,%3;":"=r"(r):"r"(a),"r"(b),"r"(s));
 
 
-#line 3417 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
-    r = __vabsdiffu4 (a, b);
-    s = r >> 8;
-    r = (r & 0x00ff00ff) + (s & 0x00ff00ff);
-    r = ((r << 16) + r) >> 16;
+
+
+
 #line 3422 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_functions.hpp"
     return r;           
 }
@@ -104945,22 +105174,34 @@ static __inline__ __attribute__((always_inline)) double fma(double a, double b, 
 
 #line 227 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v7.5\\include\\common_functions.h"
 
-#line 19 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-#line 17 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__attribute__((global)) __attribute__((__used__)) void aKernal(
-#line 17 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-int *a){
-#line 17 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 24 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__attribute__((global)) __attribute__((__used__)) void FeedFoward(
+#line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+int *inputs, 
+#line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+int *weightMatrix, 
+#line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+int *activations, 
+#line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+int numInputNeurons){
+#line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 {
-#line 18 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 23 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 {
-#line 19 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
- int __cuda_local_var_235927_7_non_const_i;
-#line 19 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_235927_7_non_const_i = ((int)(threadIdx.x));
-#line 20 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-(a[__cuda_local_var_235927_7_non_const_i])++;
-#line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 24 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ int __cuda_local_var_254092_7_non_const_neuronIdx;
+#line 25 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ int __cuda_local_var_254093_7_non_const_inputNeuronIdx;
+#line 27 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ double __cuda_local_var_254095_10_non_const_result;
+#line 24 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_254092_7_non_const_neuronIdx = ((int)(blockIdx.x));
+#line 25 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_254093_7_non_const_inputNeuronIdx = ((int)(threadIdx.x));
+#line 27 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_254095_10_non_const_result = ((double)((weightMatrix[((((unsigned)__cuda_local_var_254092_7_non_const_neuronIdx) * (blockDim.x)) + ((unsigned)__cuda_local_var_254093_7_non_const_inputNeuronIdx))]) * (inputs[__cuda_local_var_254093_7_non_const_inputNeuronIdx])));
+#line 29 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 } 
-#line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 29 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 }}
