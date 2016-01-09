@@ -33,7 +33,7 @@ namespace nnn
                 for (int inputSet = 0; inputSet < dataSet.Count; inputSet++)
                 {
                     var image = dataSet[inputSet];
-                    n.bp(n.ff(image.Item1), new List<double>(image.Item2));
+                    n.bp(n.ffParallel(image.Item1.ToArray()).ToList(), new List<double>(image.Item2));
                     if (inputSet % n.miniBatchSize == 0 && inputSet != 0)
                     {
                         n.averageAndCorrect();

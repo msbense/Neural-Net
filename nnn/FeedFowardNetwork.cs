@@ -21,27 +21,27 @@ namespace nnn
         {
             Structure = structure;
             Weights = new List<double[]>(Structure.Length);
-            for (int layerIndex = 0; layerIndex < Weights.Count; layerIndex++)
+            for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++)
             {
                 int numInputNeurons = (layerIndex > 0) ? Structure[layerIndex - 1] : 0;
-                Weights[layerIndex] = new double[Structure[layerIndex] * numInputNeurons];
+                Weights.Add(new double[Structure[layerIndex] * numInputNeurons]);
             }
             Biases = new List<double[]>(Structure.Length);
-            for (int layerIndex = 0; layerIndex < Biases.Count; layerIndex++) 
+            for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++) 
             {
-                Biases[layerIndex] = new double[Structure[layerIndex]];
+                Biases.Add(new double[Structure[layerIndex]]);
             }
             
             Inputs = new List<double[]>(Structure.Length);
-            for (int layerIndex = 0; layerIndex < Inputs.Count; layerIndex++) 
+            for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++) 
             {
-                Inputs[layerIndex] = new double[Structure[layerIndex]];
+                Inputs.Add(new double[Structure[layerIndex]]);
             }
             
             Activations = new List<double[]>(Structure.Length);
-            for (int layerIndex = 0; layerIndex < Activations.Count; layerIndex++) 
+            for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++) 
             {
-                Activations[layerIndex] = new double[Structure[layerIndex]];
+                Activations.Add(new double[Structure[layerIndex]]);
             }
             
             if (cudaEnabled)
@@ -72,7 +72,7 @@ namespace nnn
             Activations[0] = inputs;
             for (int layerIndex = 1; layerIndex < Structure.Length; layerIndex++)
             {
-                CudaKernel ff = ParallelMethods.Kernels["FeedFoward"];
+                CudaKernel ff = ParallelMethods.FeedFoward;
                 ff.GridDimensions = new dim3(Structure[layerIndex]);
                 ff.BlockDimensions = new dim3(Structure[layerIndex - 1]);
                 CudaDeviceVariable<double> d_inputs = Activations[layerIndex - 1];

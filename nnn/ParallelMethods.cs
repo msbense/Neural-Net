@@ -13,13 +13,13 @@ namespace nnn
     {
         private static CudaContext CudaCtx;
         private static CUmodule Module;
-        public static Dictionary<string, CudaKernel> Kernels;
+        public static CudaKernel FeedFoward;
 
         public static void Initialize(params int[] structure)
         {
             CudaCtx = new CudaContext();
             Module = CudaCtx.LoadModule(@"..\..\..\CUDA\Debug\kernel.ptx");
-            Kernels.Add("FeedFoward", new CudaKernel("FeedFoward", Module, CudaCtx));
+            FeedFoward = new CudaKernel("FeedFoward", Module, CudaCtx);
         }
     }
 }
