@@ -46,6 +46,11 @@ namespace nnn
             BackPropFirstLayer.BlockDimensions = dim;
         }
 
+        public static void setBackPropDim(dim3 dim)
+        {
+            BackProp.BlockDimensions = dim;
+        }
+
         public static double[] runBackPropFirstLayer(double[] activations, double[] correct)
         {
             CudaDeviceVariable<double> d_errors = new double[activations.Length];
@@ -58,6 +63,24 @@ namespace nnn
             CudaCtx.FreeMemory(d_activations.DevicePointer);
             CudaCtx.FreeMemory(d_correct.DevicePointer);
             CudaCtx.FreeMemory(d_errors.DevicePointer);
+            return errors;
+        }
+
+
+        public static double[] runBackProp(double[] input_errors, double[] activations, double[] weights, int numOutputNeuorns, int numInputNeurons)
+        {
+            CudaDeviceVariable<double> d_input_errors = input_errors;
+            CudaDeviceVariable<double> d_activations = activations;
+            CudaDeviceVariable<double> d_weights = weights;
+            CudaDeviceVariable<double> d_output_errors = new double[numInputNeurons];
+
+            BackProp.Run(d_input_errors.DevicePointer, d_output_errors.DevicePointer, d_activations.DevicePointer, d_weights.DevicePointer, numOutputNeuorns, numInputNeurons);
+            double[] errors = d_output_errors;
+
+            CudaCtx.FreeMemory(d_input_errors.DevicePointer);
+            CudaCtx.FreeMemory(d_activations.DevicePointer);
+            CudaCtx.FreeMemory(d_weights.DevicePointer);
+            CudaCtx.FreeMemory(d_output_errors.DevicePointer);
             return errors;
         }
     }

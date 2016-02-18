@@ -132,7 +132,8 @@ namespace nnn
 
             for (int layerIndex = Activations.Count - 2; layerIndex > 0; layerIndex--)
             {
-
+                ParallelMethods.setBackPropDim(new dim3(Structure[layerIndex]));
+                Errors[layerIndex] = ParallelMethods.runBackProp(Errors[layerIndex + 1], Activations[layerIndex], Weights[layerIndex + 1], Structure[layerIndex + 1], Structure[layerIndex]);
             }
         }
 
