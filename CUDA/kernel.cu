@@ -18,31 +18,39 @@
 extern "C"
 {
 	//Multiplies input vector by weight vector
-	__global__ void FeedFoward(int *inputs, int *weightMatrix, int *activations, int numInputNeurons)
+	__global__ void FeedFoward(double *inputs, double *weightMatrix, double *activations, int numInputNeurons)
 	{
-		int neuronIdx = blockIdx.x;
-		int inputNeuronIdx = threadIdx.x;
-		__shared__ double sum;
-		double result = weightMatrix[(neuronIdx * blockDim.x) + inputNeuronIdx] * inputs[inputNeuronIdx];
-		
-		//atomicAdd using doubles
-		unsigned long long int* address_as_ull = (unsigned long long int*) &sum;
-		unsigned long long int old = *address_as_ull, assumed;
-		do {
-			assumed = old;
-			old = atomicCAS(address_as_ull, assumed,
-				__double_as_longlong(result +
-				__longlong_as_double(assumed)));
-		} while (assumed != old);
-		__syncthreads();
-
-		if (inputNeuronIdx == 0) 
+		int neuronIdx = threadIdx.x;
+		double sum;
+		for (int inputNeuronIdx = 0; inputNeuronIdx < numInputNeurons; inputNeuronIdx++)
 		{
-			activations[neuronIdx] = (1/(1+exp(-sum)));
+			sum += weightMatrix[(neuronIdx * numInputNeurons) + inputNeuronIdx] * inputs[inputNeuronIdx];
 		}
+		activations[neuronIdx] = (1/(1+exp(-sum)));
 	}
 
-	
+	__global__ void BackPropFirstLayer(int* errors, int* activations, int* correct) 
+	{
+		int neuronIdx = threadIdx.x;
+		errors[neuronIdx] = activations[neuronIdx] - correct[neuronIdx];
+	}
+
+	__global__ void BackProp(int* input_errors, int* output_errors, int* activations, int* weightMatrix, int numOutputNeurons, int numInputNeurons)
+	{
+		int neuronIdx = threadIdx.x;
+		double sum = 0;
+		for (int outputNeuronIdx = 0; outputNeuronIdx < numOutputNeurons; outputNeuronIdx++) 
+		{
+			sum += weightMatrix[(outputNeuronIdx * numInputNeurons) + neuronIdx] * input_errors[outputNeuronIdx];
+		}
+		double z = activations[neuronIdx];
+		output_errors[neuronIdx] = sum * (exp(-z) / pow(1 + exp(-z), 2));
+	}
+
+	__global__ void AverageErrors() 
+	{
+
+	}
 }
 int main()
 {

@@ -79315,46 +79315,30 @@ extern "C" {  __noinline__ void FeedFoward(int *inputs, int *weightMatrix, int *
 #line 22
 { 
 #line 23
-int neuronIdx = __device_builtin_variable_blockIdx.x; 
+int neuronIdx = __device_builtin_variable_threadIdx.x; 
 #line 24
-int inputNeuronIdx = __device_builtin_variable_threadIdx.x; 
+double sum; 
 #line 25
-static double sum; 
+for (int inputNeuronIdx = 0; inputNeuronIdx < numInputNeurons; inputNeuronIdx++) 
 #line 26
-double result = (weightMatrix[(neuronIdx * (__device_builtin_variable_blockDim.x)) + inputNeuronIdx]) * (inputs[inputNeuronIdx]); 
-#line 29
-unsigned __int64 *address_as_ull = (unsigned __int64 *)(&sum); 
-#line 30
-unsigned __int64 old = *address_as_ull, assumed; 
-#line 31
-do { 
-#line 32
-assumed = old; 
-#line 33
-old = atomicCAS(address_as_ull, assumed, __double_as_longlong(result + __longlong_as_double(assumed))); 
-#line 36
-} while (assumed != old); 
-#line 37
-__syncthreads(); 
-#line 39
-if (inputNeuronIdx == 0) 
-#line 40
 { 
-#line 41
-(activations[neuronIdx]) = ((1) / ((1) + exp(-sum))); 
-#line 42
+#line 27
+sum += ((weightMatrix[(neuronIdx * (__device_builtin_variable_blockDim.x)) + inputNeuronIdx]) * (inputs[inputNeuronIdx])); 
+#line 28
 }  
-#line 43
+#line 29
+(activations[neuronIdx]) = ((1) / ((1) + exp(-sum))); 
+#line 31
 } 
 #endif
 } 
-#line 47 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 35 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 int main() 
-#line 48
+#line 36
 { 
-#line 49
+#line 37
 return 0; 
-#line 50
+#line 38
 } 
 #line 1 "kernel.cudafe1.stub.c"
 #define _NV_ANON_NAMESPACE _GLOBAL__N__14_kernel_cpp1_ii_ab6093b9

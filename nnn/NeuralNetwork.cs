@@ -8,7 +8,6 @@ namespace nnn
 {
     public abstract class NeuralNetwork
     {
-        public CudaContext CudaCtx { get; set; }
         public double LearningConstant { get; set; }
         public double totalTrainingSize { get; set; }
         public double miniBatchSize { get; set; }

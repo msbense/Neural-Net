@@ -1,8 +1,10 @@
-﻿Build started 1/8/2016 7:08:31 PM.
-     1>Project "C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\CUDA\CUDA.vcxproj" on node 2 (Build target(s)).
-     1>CudaBuild:
+﻿Build started 2/14/2016 2:44:35 PM.
+     1>Project "C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\CUDA\CUDA.vcxproj" on node 3 (Build target(s)).
+     1>AddCudaCompileDeps:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c "C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\CUDA\kernel.cu" 
+       CudaBuild:
          Compiling CUDA source file kernel.cu...
-         cmd.exe /C "C:\Users\MSB\AppData\Local\Temp\tmp67e618df98a84cbabf554d5c9a20b967.cmd"
+         cmd.exe /C "C:\Users\MSB\AppData\Local\Temp\tmp1d73a7c842d94aa5bda6bd8cb9f5a5d3.cmd"
          "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G  --keep --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\kernel.cu.obj "C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\CUDA\kernel.cu"
          
          C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\CUDA>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G  --keep --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\kernel.cu.obj "C:\Users\MSB\Documents\Visual Studio 2015\Projects\Neural-Net\CUDA\kernel.cu" 
@@ -22,4 +24,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.04
+Time Elapsed 00:00:05.43

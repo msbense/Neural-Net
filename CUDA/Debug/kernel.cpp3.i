@@ -9544,24 +9544,6 @@ int  extern const warpSize;
 
 
 #line 502 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\crtdefs.h"
-
-
-
-#line 506 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\crtdefs.h"
-
-
-
-#line 510 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\crtdefs.h"
-
-
-
-#line 514 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\crtdefs.h"
-
-
-
-#line 518 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\crtdefs.h"
-#line 211 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-static  __inline__ unsigned long long _ZN36_INTERNAL_14_kernel_cpp1_ii_ab6093b99atomicCASEPyyy(unsigned long long *, unsigned long long, unsigned long long);
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 __attribute__((global)) __attribute__((__used__)) extern void FeedFoward(int *, int *, int *, int);
 #line 1 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v7.5\\include\\common_functions.h"
@@ -104970,32 +104952,6 @@ static __inline__ __attribute__((always_inline)) double fma(double a, double b, 
 #line 23 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 
 #line 25 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-
-#line 27 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-
-#line 29 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-
-#line 31 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-
-#line 33 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-#line 211 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-static  __inline__ unsigned long long _ZN36_INTERNAL_14_kernel_cpp1_ii_ab6093b99atomicCASEPyyy(
-#line 211 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-unsigned long long *address, 
-#line 211 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-unsigned long long compare, 
-#line 211 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-unsigned long long val){
-#line 211 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-{
-#line 212 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-{
-#line 213 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-return __ullAtomicCAS(address, compare, val);
-#line 214 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-}
-#line 214 "c:\\program files\\nvidia gpu computing toolkit\\cuda\\v7.5\\include\\device_atomic_functions.hpp"
-}}
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 __attribute__((global)) __attribute__((__used__)) void FeedFoward(
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
@@ -105013,48 +104969,28 @@ int numInputNeurons){
 #line 23 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
  int __cuda_local_var_238639_7_non_const_neuronIdx;
 #line 24 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
- int __cuda_local_var_238640_7_non_const_inputNeuronIdx;
-#line 25 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-static  __attribute__((shared))  __attribute__((__used__)) double __cuda_local_var_238641_33_non_const_sum;
-#line 26 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
- double __cuda_local_var_238642_10_non_const_result;
-#line 29 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
- unsigned long long *__cuda_local_var_238645_27_non_const_address_as_ull;
-#line 30 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
- unsigned long long __cuda_local_var_238646_26_non_const_old;
-#line 30 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
- unsigned long long __cuda_local_var_238646_49_non_const_assumed;
+ double __cuda_local_var_238640_10_non_const_sum;
 #line 23 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_238639_7_non_const_neuronIdx = ((int)(blockIdx.x));
-#line 24 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_238640_7_non_const_inputNeuronIdx = ((int)(threadIdx.x));
+__cuda_local_var_238639_7_non_const_neuronIdx = ((int)(threadIdx.x));
+#line 23 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+{
+#line 25 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ int inputNeuronIdx;
+#line 25 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+inputNeuronIdx = 0; {
+#line 25 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+for (; (inputNeuronIdx < numInputNeurons); inputNeuronIdx++)
 #line 26 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_238642_10_non_const_result = ((double)((weightMatrix[((((unsigned)__cuda_local_var_238639_7_non_const_neuronIdx) * (blockDim.x)) + ((unsigned)__cuda_local_var_238640_7_non_const_inputNeuronIdx))]) * (inputs[__cuda_local_var_238640_7_non_const_inputNeuronIdx])));
-#line 29 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_238645_27_non_const_address_as_ull = ((unsigned long long *)(&__cuda_local_var_238641_33_non_const_sum));
-#line 30 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_238646_26_non_const_old = (*__cuda_local_var_238645_27_non_const_address_as_ull);
-#line 31 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-do
-#line 31 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 {
-#line 32 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_238646_49_non_const_assumed = __cuda_local_var_238646_26_non_const_old;
-#line 33 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_238646_26_non_const_old = (_ZN36_INTERNAL_14_kernel_cpp1_ii_ab6093b99atomicCASEPyyy(__cuda_local_var_238645_27_non_const_address_as_ull, __cuda_local_var_238646_49_non_const_assumed, ((unsigned long long)(__double_as_longlong((__cuda_local_var_238642_10_non_const_result + (__longlong_as_double(((long long)__cuda_local_var_238646_49_non_const_assumed)))))))));
-#line 36 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-} while (__cuda_local_var_238646_49_non_const_assumed != __cuda_local_var_238646_26_non_const_old);
-#line 37 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__syncthreads();
-#line 39 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-if (__cuda_local_var_238640_7_non_const_inputNeuronIdx == 0)
-#line 40 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-{
-#line 41 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-(activations[__cuda_local_var_238639_7_non_const_neuronIdx]) = ((int)(__double2int_rz(((double)((1.0) / ((1.0) + (exp((-__cuda_local_var_238641_33_non_const_sum)))))))));
-#line 42 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 27 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_238640_10_non_const_sum += ((double)((weightMatrix[((((unsigned)__cuda_local_var_238639_7_non_const_neuronIdx) * (blockDim.x)) + ((unsigned)inputNeuronIdx))]) * (inputs[inputNeuronIdx])));
+#line 28 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+} }
+#line 28 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 }
-#line 43 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 29 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+(activations[__cuda_local_var_238639_7_non_const_neuronIdx]) = ((int)(__double2int_rz(((double)((1.0) / ((1.0) + (exp((-__cuda_local_var_238640_10_non_const_sum)))))))));
+#line 31 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 } 
-#line 43 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 31 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 }}

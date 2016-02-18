@@ -11,7 +11,7 @@ void __device_stub__Z10FeedFowardPiS_S_i(int *__par0, int *__par1, int *__par2, 
 void FeedFoward( int *__cuda_0,int *__cuda_1,int *__cuda_2,int __cuda_3)
 #line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 {__device_stub__Z10FeedFowardPiS_S_i( __cuda_0,__cuda_1,__cuda_2,__cuda_3);
-#line 43 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 31 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 }
 #line 1 "Debug/kernel.cudafe1.stub.c"
 static void __nv_cudaEntityRegisterCallback( void **__T20) {  __nv_dummy_param_ref(__T20); __nv_save_fatbinhandle_for_managed_rt(__T20); __cudaRegisterEntry(__T20, ((void ( *)(int *, int *, int *, int))FeedFoward), FeedFoward, (-1)); }

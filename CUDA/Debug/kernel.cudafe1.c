@@ -732,7 +732,7 @@ _ZSt7_Noinit};
 typedef unsigned size_t;
 #include "crt/host_runtime.h"
 void *memcpy(void*, const void*, size_t); void *memset(void*, int, size_t);
-#line 47 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 35 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 extern int main(void);
 extern int __cudaSetupArgSimple();
 extern int __cudaLaunch();
@@ -743,7 +743,7 @@ extern int __cudaRegisterBinary();
 static void __sti___14_kernel_cpp1_ii_ab6093b9(void);
 #pragma section(".CRT$XCU",read,write)
 __declspec(allocate(".CRT$XCU"))static void (*__dummy_static_init__sti___14_kernel_cpp1_ii_ab6093b9[])(void) = {__sti___14_kernel_cpp1_ii_ab6093b9};
-#line 47 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+#line 35 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 int main(void)
 {
 return 0;

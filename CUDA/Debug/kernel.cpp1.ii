@@ -238636,26 +238636,14 @@ extern "C"
 	
 	__declspec(__global__) void FeedFoward(int *inputs, int *weightMatrix, int *activations, int numInputNeurons)
 	{
-		int neuronIdx = blockIdx.x;
-		int inputNeuronIdx = threadIdx.x;
-		__declspec(__shared__) double sum;
-		double result = weightMatrix[(neuronIdx * blockDim.x) + inputNeuronIdx] * inputs[inputNeuronIdx];
-		
-		
-		unsigned long long int* address_as_ull = (unsigned long long int*) &sum;
-		unsigned long long int old = *address_as_ull, assumed;
-		do {
-			assumed = old;
-			old = atomicCAS(address_as_ull, assumed,
-				__double_as_longlong(result +
-				__longlong_as_double(assumed)));
-		} while (assumed != old);
-		__syncthreads();
-
-		if (inputNeuronIdx == 0) 
+		int neuronIdx = threadIdx.x;
+		double sum;
+		for (int inputNeuronIdx = 0; inputNeuronIdx < numInputNeurons; inputNeuronIdx++)
 		{
-			activations[neuronIdx] = (1/(1+exp(-sum)));
+			sum += weightMatrix[(neuronIdx * blockDim.x) + inputNeuronIdx] * inputs[inputNeuronIdx];
 		}
+		activations[neuronIdx] = (1/(1+exp(-sum)));
+		
 	}
 
 	

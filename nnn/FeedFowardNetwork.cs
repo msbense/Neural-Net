@@ -13,12 +13,18 @@ namespace nnn
         public List<List<Neuron>> Neurons;
         public int[] Structure { get; set; }
 
-        List<double[]> Weights; //Weights[layerIndex][neuronIndex * Structure[layerIndex] + inputNeuronIndex]
-        List<double[]> Biases; //Biases[layerIndex][neuronIndex]                                //TODO Initialize these Lists
+        List<double[]> Weights; //Weights[layerIndex][neuronIndex * Structure[layerIndex - 1] + inputNeuronIndex]
+        List<double[]> Biases; //Biases[layerIndex][neuronIndex]                                
         List<double[]> Inputs; 
         List<double[]> Activations;
+        List<double[]> Errors;
+        List<double[]> SumErrors;
         public FeedFowardNetwork(bool cudaEnabled, params int[] structure)
         {
+            if (cudaEnabled)
+            {
+                ParallelMethods.Initialize();
+            }
             Structure = structure;
             Weights = new List<double[]>(Structure.Length);
             for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++)
@@ -26,6 +32,7 @@ namespace nnn
                 int numInputNeurons = (layerIndex > 0) ? Structure[layerIndex - 1] : 0;
                 Weights.Add(new double[Structure[layerIndex] * numInputNeurons]);
             }
+            
             Biases = new List<double[]>(Structure.Length);
             for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++) 
             {
@@ -44,10 +51,18 @@ namespace nnn
                 Activations.Add(new double[Structure[layerIndex]]);
             }
             
-            if (cudaEnabled)
+            Errors = new List<double[]>(Structure.Length);
+            for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++)
             {
-                initializeCUDA();
+                Errors.Add(new double[Structure[layerIndex]]);
             }
+
+            SumErrors = new List<double[]>(Structure.Length);
+            for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++)
+            {
+                SumErrors.Add(new double[Structure[layerIndex]]);
+            }
+
             Random rng = new Random();
             Neurons = new List<List<Neuron>>();
             for (int layerIndex = 0; layerIndex < structure.Length; layerIndex++)
@@ -60,30 +75,7 @@ namespace nnn
                 }
             }
         }
-
-        private void initializeCUDA()
-        {
-            ParallelMethods.Initialize(Structure);
-        }
-
         
-        public double[] ffParallel(double[] inputs)
-        {
-            Activations[0] = inputs;
-            for (int layerIndex = 1; layerIndex < Structure.Length; layerIndex++)
-            {
-                CudaKernel ff = ParallelMethods.FeedFoward;
-                ff.GridDimensions = new dim3(Structure[layerIndex]);
-                ff.BlockDimensions = new dim3(Structure[layerIndex - 1]);
-                CudaDeviceVariable<double> d_inputs = Activations[layerIndex - 1];
-                CudaDeviceVariable<double> d_weights = Weights[layerIndex];
-                CudaDeviceVariable<double> d_activations = new CudaDeviceVariable<double>(Activations[layerIndex].Length);
-                ff.Run(d_inputs.DevicePointer, d_weights.DevicePointer, d_activations.DevicePointer);
-                Activations[layerIndex] = d_activations;
-            }
-            return Activations[Activations.Count - 1];
-        }
-
         public List<double> ff(List<double> inputs)
         {
             if (inputs.Count != Neurons[0].Count)
@@ -118,6 +110,30 @@ namespace nnn
                 outputs.Add(n.Activation);
             }
             return outputs;
+        }
+
+        public double[] ffParallel(double[] inputs)
+        {
+            Activations[0] = inputs;
+            for (int layerIndex = 1; layerIndex < Structure.Length; layerIndex++)
+            {
+                ParallelMethods.setFeedFowardBlockDim(new dim3(Structure[layerIndex]));
+                int numActivations = Activations[layerIndex].Length;
+                int numInputNeurons = Activations[layerIndex - 1].Length;
+                Activations[layerIndex] = ParallelMethods.runFeedFoward(Activations[layerIndex - 1], Weights[layerIndex], numActivations, numInputNeurons);
+            }
+            return Activations[Activations.Count - 1];
+        }
+
+        public void bpParallel(double[] outputs, double[] correct)
+        {
+            ParallelMethods.setBackPropFirstLayerDim(new dim3(outputs.Length));
+            Errors[Errors.Count - 1] = ParallelMethods.runBackPropFirstLayer(outputs, correct);
+
+            for (int layerIndex = Activations.Count - 2; layerIndex > 0; layerIndex--)
+            {
+
+            }
         }
 
         public void bp(List<double> outputs, List<double> correct)

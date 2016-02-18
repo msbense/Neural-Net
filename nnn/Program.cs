@@ -16,6 +16,8 @@ namespace nnn
     {
         static void Main(string[] args)
         {
+            RunBasic();
+            return;
             FeedFowardNetwork n = new FeedFowardNetwork(true, 784, 40, 10)
             {
                 LearningConstant = .0005,
@@ -75,9 +77,9 @@ namespace nnn
         {
             FeedFowardNetwork n = new FeedFowardNetwork(true, 2, 10, 1)
             {
-                LearningConstant = .3,
+                LearningConstant = .015,
                 totalTrainingSize = 2000,
-                miniBatchSize = 20
+                miniBatchSize = 10
             };
 
             Random rng = new Random();
@@ -104,13 +106,14 @@ namespace nnn
                 {
                     var inputs = allInputs[i];
                     var correctOutputs = allOutputs[i];
-                    n.bp(n.ff(inputs), correctOutputs);
+                    n.bp(n.ff(inputs).ToList(), correctOutputs);
                     if (i % n.miniBatchSize == 0 && i != 0) 
                     {
                         n.averageAndCorrect();
                     }
                 }
                 currentPercentCorrect = RunBasicValidation(n);
+                Console.WriteLine(currentPercentCorrect);
                 currentEpoch++;
             }
             Console.ReadKey();
