@@ -18,7 +18,6 @@ namespace nnn
         List<double[]> Inputs; 
         List<double[]> Activations;
         List<double[]> Errors;
-        List<double[]> SumErrors;
         public FeedFowardNetwork(bool cudaEnabled, params int[] structure)
         {
             if (cudaEnabled)
@@ -55,12 +54,6 @@ namespace nnn
             for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++)
             {
                 Errors.Add(new double[Structure[layerIndex]]);
-            }
-
-            SumErrors = new List<double[]>(Structure.Length);
-            for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++)
-            {
-                SumErrors.Add(new double[Structure[layerIndex]]);
             }
 
             Random rng = new Random();
@@ -133,7 +126,12 @@ namespace nnn
             for (int layerIndex = Activations.Count - 2; layerIndex > 0; layerIndex--)
             {
                 ParallelMethods.setBackPropDim(new dim3(Structure[layerIndex]));
-                Errors[layerIndex] = ParallelMethods.runBackProp(Errors[layerIndex + 1], Activations[layerIndex], Weights[layerIndex + 1], Structure[layerIndex + 1], Structure[layerIndex]);
+                double[] errs = new double[Structure[layerIndex]];
+                errs = ParallelMethods.runBackProp(Errors[layerIndex + 1], Activations[layerIndex], Weights[layerIndex + 1], Structure[layerIndex + 1], Structure[layerIndex]);
+                for (int i = 0; i < errs.Length; i++)
+                {
+                    Errors[layerIndex][i] += errs[i];
+                }
             }
         }
 
@@ -178,7 +176,19 @@ namespace nnn
 
 
         }
+        public void averageAndCorrectParallel()
+        {
+            for (int layerIndex = 1; layerIndex < Activations.Count; layerIndex++)
+            {
+                ParallelMethods.setAverageErrorsDim(new dim3(Structure[layerIndex]));
+                Errors[layerIndex] = ParallelMethods.runAverageErrors(Errors[layerIndex], this.miniBatchSize);
+            }
 
+            for (int layerIndex = 1; layerIndex < Activations.Count; layerIndex++)
+            {
+                //Adjust weights + biases
+            }
+        }
         public void averageAndCorrect()
         {
             foreach (List<Neuron> layer in Neurons)

@@ -1176,6 +1176,10 @@ typedef unsigned size_t;
 #line 783 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
  __device_builtin__ ___device__(extern  __no_sc__) float tanhf(float);
 #endif
+#line 1027 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+___device__(extern  __no_sc__) double _Z3powdi(double, int);
+#line 1013 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+___device__(extern  __no_sc__) double _Z8_Pow_intIdET_S0_i(double, int);
 #if !defined(__CUDABE__)
 #endif
 #if !defined(__CUDABE__)
@@ -7277,7 +7281,13 @@ typedef unsigned size_t;
 #if !defined(__CUDABE__)
 #endif
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__global__ __var_used__ extern void FeedFoward(int *, int *, int *, int);
+__global__ __var_used__ extern void FeedFoward(double *, double *, double *, int);
+#line 32 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__global__ __var_used__ extern void BackPropFirstLayer(double *, double *, double *);
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__global__ __var_used__ extern void BackProp(double *, double *, double *, double *, int, int);
+#line 50 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__global__ __var_used__ extern void AverageErrors(double *, int);
 #include "common_functions.h"
 #if !defined(__CUDABE__)
 #endif
@@ -7673,6 +7683,54 @@ __global__ __var_used__ extern void FeedFoward(int *, int *, int *, int);
 #endif
 #if !defined(__CUDABE__)
 #endif
+#line 1027 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+___device__( __no_sc__) __inline__ double _Z3powdi(
+#line 1027 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+double _X, 
+#line 1027 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+int _Y){
+#line 1028 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+{
+#line 1028 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+return _Z8_Pow_intIdET_S0_i(_X, _Y);
+#line 1028 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+}}
+#line 1013 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+___device__( __no_sc__) __inline__ double _Z8_Pow_intIdET_S0_i(
+#line 1013 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+double _X, 
+#line 1013 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+int _Y){
+#line 1014 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+{
+#line 1014 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+ unsigned __cuda_local_var_88848_23_non_const__N;
+#line 1015 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+if (_Y >= 0) {
+#line 1016 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+__cuda_local_var_88848_23_non_const__N = ((unsigned)_Y); } else  {
+#line 1018 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+__cuda_local_var_88848_23_non_const__N = ((unsigned)(-_Y)); } {
+#line 1019 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+ double _Z;
+#line 1019 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+_Z = (1.0);
+#line 1019 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+for (; ; _X *= _X)
+#line 1020 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+{
+#line 1020 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+if ((__cuda_local_var_88848_23_non_const__N & 1U) != 0U) {
+#line 1021 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+_Z *= _X; }
+#line 1022 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+if ((__cuda_local_var_88848_23_non_const__N >>= 1) == 0U) {
+#line 1023 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+return (_Y < 0) ? ((1.0) / _Z) : _Z; }
+#line 1023 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+} }
+#line 1023 "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\include\\math.h"
+}}
 #if !defined(__CUDABE__)
 #endif
 #if !defined(__CUDABE__)
@@ -13776,11 +13834,11 @@ __global__ __var_used__ extern void FeedFoward(int *, int *, int *, int);
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 __global__ __var_used__ void FeedFoward(
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-int *inputs, 
+double *inputs, 
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-int *weightMatrix, 
+double *weightMatrix, 
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-int *activations, 
+double *activations, 
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 int numInputNeurons){
 #line 22 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
@@ -13800,10 +13858,84 @@ for (; (inputNeuronIdx < numInputNeurons); inputNeuronIdx++)
 #line 26 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 {
 #line 27 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-__cuda_local_var_238640_10_non_const_sum += ((double)((weightMatrix[((((unsigned)__cuda_local_var_238639_7_non_const_neuronIdx) * (blockDim.x)) + ((unsigned)inputNeuronIdx))]) * (inputs[inputNeuronIdx])));
+__cuda_local_var_238640_10_non_const_sum += ((weightMatrix[((__cuda_local_var_238639_7_non_const_neuronIdx * numInputNeurons) + inputNeuronIdx)]) * (inputs[inputNeuronIdx]));
 #line 28 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 } }
 #line 29 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-(activations[__cuda_local_var_238639_7_non_const_neuronIdx]) = ((int)__double2int_rz((double)(((1.0) / ((1.0) + (exp((-__cuda_local_var_238640_10_non_const_sum)))))))); 
-#line 31 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+(activations[__cuda_local_var_238639_7_non_const_neuronIdx]) = ((1.0) / ((1.0) + (exp((-__cuda_local_var_238640_10_non_const_sum))))); 
+#line 30 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+}}
+#line 32 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__global__ __var_used__ void BackPropFirstLayer(
+#line 32 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+double *errors, 
+#line 32 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+double *activations, 
+#line 32 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+double *correct){
+#line 33 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+{
+#line 34 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ int __cuda_local_var_238650_7_non_const_neuronIdx;
+#line 34 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_238650_7_non_const_neuronIdx = ((int)(threadIdx.x));
+#line 35 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+(errors[__cuda_local_var_238650_7_non_const_neuronIdx]) = ((activations[__cuda_local_var_238650_7_non_const_neuronIdx]) - (correct[__cuda_local_var_238650_7_non_const_neuronIdx])); 
+#line 36 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+}}
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__global__ __var_used__ void BackProp(
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+double *input_errors, 
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+double *output_errors, 
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+double *activations, 
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+double *weightMatrix, 
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+int numOutputNeurons, 
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+int numInputNeurons){
+#line 39 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+{
+#line 40 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ int __cuda_local_var_238656_7_non_const_neuronIdx;
+#line 41 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ double __cuda_local_var_238657_10_non_const_sum;
+#line 46 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ double __cuda_local_var_238662_10_non_const_z;
+#line 40 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_238656_7_non_const_neuronIdx = ((int)(threadIdx.x));
+#line 41 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_238657_10_non_const_sum = (0.0); {
+#line 42 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+ int outputNeuronIdx;
+#line 42 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+outputNeuronIdx = 0;
+#line 42 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+for (; (outputNeuronIdx < numOutputNeurons); outputNeuronIdx++)
+#line 43 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+{
+#line 44 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_238657_10_non_const_sum += ((weightMatrix[((outputNeuronIdx * numInputNeurons) + __cuda_local_var_238656_7_non_const_neuronIdx)]) * (input_errors[outputNeuronIdx]));
+#line 45 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+} }
+#line 46 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__cuda_local_var_238662_10_non_const_z = (activations[__cuda_local_var_238656_7_non_const_neuronIdx]);
+#line 47 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+(output_errors[__cuda_local_var_238656_7_non_const_neuronIdx]) = (__cuda_local_var_238657_10_non_const_sum * ( fdivide((exp((-__cuda_local_var_238662_10_non_const_z))) , (_Z3powdi(((1.0) + (exp((-__cuda_local_var_238662_10_non_const_z)))), 2))))); 
+#line 48 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+}}
+#line 50 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+__global__ __var_used__ void AverageErrors(
+#line 50 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+double *error, 
+#line 50 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+int mini){
+#line 51 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+{
+#line 52 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+(error[(threadIdx.x)]) = ( fdivide((error[(threadIdx.x)]) , (15.0))); 
+#line 53 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
 }}

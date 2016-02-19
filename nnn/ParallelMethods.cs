@@ -14,12 +14,14 @@ namespace nnn
         public static CudaKernel FeedFoward;
         public static CudaKernel BackPropFirstLayer;
         public static CudaKernel BackProp;
+        public static CudaKernel AverageErrors; 
         public static void Initialize()
         {
             CudaCtx = new CudaContext();
             FeedFoward = CudaCtx.LoadKernel(@"..\..\..\CUDA\Debug\kernel.ptx", "FeedFoward");
-            //BackPropFirstLayer = CudaCtx.LoadKernel(@"..\..\..\CUDA\Debug\kernel.ptx", "BackPropFirstLayer");
-            //BackProp = CudaCtx.LoadKernel(@"..\..\..\CUDA\Debug\kernel.ptx", "BackProp");
+            BackPropFirstLayer = CudaCtx.LoadKernel(@"..\..\..\CUDA\Debug\kernel.ptx", "BackPropFirstLayer");
+            BackProp = CudaCtx.LoadKernel(@"..\..\..\CUDA\Debug\kernel.ptx", "BackProp");
+            AverageErrors = CudaCtx.LoadKernel(@"..\..\..\CUDA\Debug\kernel.ptx", "AverageErrors");
         }
         public static double[] runFeedFoward(double[] inputs, double[] weights, int numActivations, int numInputNeurons)
         {
@@ -49,6 +51,20 @@ namespace nnn
         public static void setBackPropDim(dim3 dim)
         {
             BackProp.BlockDimensions = dim;
+        }
+
+        public static void setAverageErrorsDim(dim3 dim)
+        {
+            AverageErrors.BlockDimensions = dim;
+        }
+
+        public static double[] runAverageErrors(double[] errors, int miniBatchSize)
+        {
+            CudaDeviceVariable<double> d_errors = errors;
+            AverageErrors.Run(d_errors.DevicePointer, miniBatchSize);
+            double[] newErrors = d_errors;
+            CudaCtx.FreeMemory(d_errors.DevicePointer);
+            return newErrors;
         }
 
         public static double[] runBackPropFirstLayer(double[] activations, double[] correct)

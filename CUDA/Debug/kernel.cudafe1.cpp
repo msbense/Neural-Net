@@ -79310,7 +79310,7 @@ extern "C" { CUresult __stdcall cuGraphicsUnmapResources(unsigned count, CUgraph
 #line 10500
 extern "C" { CUresult __stdcall cuGetExportTable(const void ** ppExportTable, const CUuuid * pExportTableId); } 
 #line 21 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-extern "C" {  __noinline__ void FeedFoward(int *inputs, int *weightMatrix, int *activations, int numInputNeurons) ;
+extern "C" {  __noinline__ void FeedFoward(double *inputs, double *weightMatrix, double *activations, int numInputNeurons) ;
 #if 0
 #line 22
 { 
@@ -79323,22 +79323,71 @@ for (int inputNeuronIdx = 0; inputNeuronIdx < numInputNeurons; inputNeuronIdx++)
 #line 26
 { 
 #line 27
-sum += ((weightMatrix[(neuronIdx * (__device_builtin_variable_blockDim.x)) + inputNeuronIdx]) * (inputs[inputNeuronIdx])); 
+sum += ((weightMatrix[(neuronIdx * numInputNeurons) + inputNeuronIdx]) * (inputs[inputNeuronIdx])); 
 #line 28
 }  
 #line 29
 (activations[neuronIdx]) = ((1) / ((1) + exp(-sum))); 
-#line 31
+#line 30
 } 
 #endif
 } 
-#line 35 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-int main() 
-#line 36
+#line 32 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+extern "C" {  __noinline__ void BackPropFirstLayer(double *errors, double *activations, double *correct) ;
+#if 0
+#line 33
 { 
-#line 37
+#line 34
+int neuronIdx = __device_builtin_variable_threadIdx.x; 
+#line 35
+(errors[neuronIdx]) = ((activations[neuronIdx]) - (correct[neuronIdx])); 
+#line 36
+} 
+#endif
+} 
+#line 38 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+extern "C" {  __noinline__ void BackProp(double *input_errors, double *output_errors, double *activations, double *weightMatrix, int numOutputNeurons, int numInputNeurons) ;
+#if 0
+#line 39
+{ 
+#line 40
+int neuronIdx = __device_builtin_variable_threadIdx.x; 
+#line 41
+double sum = (0); 
+#line 42
+for (int outputNeuronIdx = 0; outputNeuronIdx < numOutputNeurons; outputNeuronIdx++) 
+#line 43
+{ 
+#line 44
+sum += ((weightMatrix[(outputNeuronIdx * numInputNeurons) + neuronIdx]) * (input_errors[outputNeuronIdx])); 
+#line 45
+}  
+#line 46
+double z = activations[neuronIdx]; 
+#line 47
+(output_errors[neuronIdx]) = (sum * (exp(-z) / pow((1) + exp(-z), 2))); 
+#line 48
+} 
+#endif
+} 
+#line 50 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+extern "C" {  __noinline__ void AverageErrors(double *error, int mini) ;
+#if 0
+#line 51
+{ 
+#line 52
+(error[__device_builtin_variable_threadIdx.x]) /= (15); 
+#line 53
+} 
+#endif
+} 
+#line 55 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+int main() 
+#line 56
+{ 
+#line 57
 return 0; 
-#line 38
+#line 58
 } 
 #line 1 "kernel.cudafe1.stub.c"
 #define _NV_ANON_NAMESPACE _GLOBAL__N__14_kernel_cpp1_ii_ab6093b9

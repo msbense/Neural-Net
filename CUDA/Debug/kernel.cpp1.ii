@@ -238634,19 +238634,39 @@ CUresult __stdcall cuGetExportTable(const void **ppExportTable, const CUuuid *pE
 extern "C"
 {
 	
-	__declspec(__global__) void FeedFoward(int *inputs, int *weightMatrix, int *activations, int numInputNeurons)
+	__declspec(__global__) void FeedFoward(double *inputs, double *weightMatrix, double *activations, int numInputNeurons)
 	{
 		int neuronIdx = threadIdx.x;
 		double sum;
 		for (int inputNeuronIdx = 0; inputNeuronIdx < numInputNeurons; inputNeuronIdx++)
 		{
-			sum += weightMatrix[(neuronIdx * blockDim.x) + inputNeuronIdx] * inputs[inputNeuronIdx];
+			sum += weightMatrix[(neuronIdx * numInputNeurons) + inputNeuronIdx] * inputs[inputNeuronIdx];
 		}
 		activations[neuronIdx] = (1/(1+exp(-sum)));
-		
 	}
 
-	
+	__declspec(__global__) void BackPropFirstLayer(double* errors, double* activations, double* correct) 
+	{
+		int neuronIdx = threadIdx.x;
+		errors[neuronIdx] = activations[neuronIdx] - correct[neuronIdx];
+	}
+
+	__declspec(__global__) void BackProp(double* input_errors, double* output_errors, double* activations, double* weightMatrix, int numOutputNeurons, int numInputNeurons)
+	{
+		int neuronIdx = threadIdx.x;
+		double sum = 0;
+		for (int outputNeuronIdx = 0; outputNeuronIdx < numOutputNeurons; outputNeuronIdx++) 
+		{
+			sum += weightMatrix[(outputNeuronIdx * numInputNeurons) + neuronIdx] * input_errors[outputNeuronIdx];
+		}
+		double z = activations[neuronIdx];
+		output_errors[neuronIdx] = sum * (exp(-z) / pow(1 + exp(-z), 2));
+	}
+
+	__declspec(__global__) void AverageErrors(double* error, int mini) 
+	{
+		error[threadIdx.x] /= 15;
+	}
 }
 int main()
 {

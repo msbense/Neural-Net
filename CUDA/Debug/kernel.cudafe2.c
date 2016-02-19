@@ -3,7 +3,7 @@
 typedef unsigned size_t;
 #include "crt/host_runtime.h"
 void *memcpy(void*, const void*, size_t); void *memset(void*, int, size_t);
-#line 29 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
-extern int __double2int_rz();
+#line 47 "C:/Users/MSB/Documents/Visual Studio 2015/Projects/Neural-Net/CUDA/kernel.cu"
+extern int fdivide();
 
 #include "Debug/kernel.cudafe2.stub.c"

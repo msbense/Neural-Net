@@ -75,10 +75,10 @@ namespace nnn
         //can the network predict y > x^2?
         public static void RunBasic()
         {
-            FeedFowardNetwork n = new FeedFowardNetwork(true, 2, 10, 1)
+            FeedFowardNetwork n = new FeedFowardNetwork(true, 2, 5, 1)
             {
-                LearningConstant = .015,
-                totalTrainingSize = 2000,
+                LearningConstant = .03,
+                totalTrainingSize = 200,
                 miniBatchSize = 10
             };
 
@@ -104,12 +104,12 @@ namespace nnn
             {
                 for (int i = 0; i < allInputs.Count; i++)
                 {
-                    var inputs = allInputs[i];
-                    var correctOutputs = allOutputs[i];
-                    n.bp(n.ff(inputs).ToList(), correctOutputs);
+                    double[] inputs = allInputs[i].ToArray();
+                    double[] correctOutputs = allOutputs[i].ToArray();
+                    n.bpParallel(n.ffParallel(inputs), correctOutputs);
                     if (i % n.miniBatchSize == 0 && i != 0) 
                     {
-                        n.averageAndCorrect();
+                        n.averageAndCorrectParallel();
                     }
                 }
                 currentPercentCorrect = RunBasicValidation(n);

@@ -29,13 +29,13 @@ extern "C"
 		activations[neuronIdx] = (1/(1+exp(-sum)));
 	}
 
-	__global__ void BackPropFirstLayer(int* errors, int* activations, int* correct) 
+	__global__ void BackPropFirstLayer(double* errors, double* activations, double* correct) 
 	{
 		int neuronIdx = threadIdx.x;
 		errors[neuronIdx] = activations[neuronIdx] - correct[neuronIdx];
 	}
 
-	__global__ void BackProp(int* input_errors, int* output_errors, int* activations, int* weightMatrix, int numOutputNeurons, int numInputNeurons)
+	__global__ void BackProp(double* input_errors, double* output_errors, double* activations, double* weightMatrix, int numOutputNeurons, int numInputNeurons)
 	{
 		int neuronIdx = threadIdx.x;
 		double sum = 0;
@@ -47,9 +47,9 @@ extern "C"
 		output_errors[neuronIdx] = sum * (exp(-z) / pow(1 + exp(-z), 2));
 	}
 
-	__global__ void AverageErrors() 
+	__global__ void AverageErrors(double* error, int mini) 
 	{
-
+		error[threadIdx.x] /= 15;
 	}
 }
 int main()

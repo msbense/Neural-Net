@@ -10,7 +10,7 @@ namespace nnn
     {
         public double LearningConstant { get; set; }
         public double totalTrainingSize { get; set; }
-        public double miniBatchSize { get; set; }
+        public int miniBatchSize { get; set; }
 
         /// <summary>
         /// Cost Prime, derivative of the cost Function
