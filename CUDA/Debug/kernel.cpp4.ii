@@ -244911,10 +244911,10 @@ CUresult __stdcall cuGetExportTable(const void **ppExportTable, const CUuuid *pE
 extern "C"
 {
 	
-	__declspec(__global__) void FeedFoward(double *inputs, double *weightMatrix, double *activations, int numInputNeurons)
+	__declspec(__global__) void FeedFoward(double *inputs, double *weightMatrix, double* biases, double *activations, int numInputNeurons)
 	{
 		int neuronIdx = threadIdx.x;
-		double sum;
+		double sum = biases[neuronIdx];
 		for (int inputNeuronIdx = 0; inputNeuronIdx < numInputNeurons; inputNeuronIdx++)
 		{
 			sum += weightMatrix[(neuronIdx * numInputNeurons) + inputNeuronIdx] * inputs[inputNeuronIdx];
@@ -244940,9 +244940,17 @@ extern "C"
 		output_errors[neuronIdx] = sum * (exp(-z) / pow(1 + exp(-z), 2));
 	}
 
-	__declspec(__global__) void AverageErrors(double* error, int mini) 
+	__declspec(__global__) void AverageAndCorrect(double* errors, double* weightMatrix, double* biases, double* prevLayerActivations, int numInputNeurons, int miniBatchSize) 
 	{
-		error[threadIdx.x] /= 15;
+		int neuronIdx = threadIdx.x;
+		errors[neuronIdx] /= miniBatchSize;
+		double error = errors[neuronIdx];
+		biases[neuronIdx] = error;
+
+		for (int inputNeuronIdx = 0; inputNeuronIdx < numInputNeurons; inputNeuronIdx++) 
+		{
+			weightMatrix[(neuronIdx * numInputNeurons) + inputNeuronIdx] = error * prevLayerActivations[inputNeuronIdx];
+		}
 	}
 }
 int main()

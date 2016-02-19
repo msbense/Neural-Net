@@ -75,7 +75,7 @@ namespace nnn
         //can the network predict y > x^2?
         public static void RunBasic()
         {
-            FeedFowardNetwork n = new FeedFowardNetwork(true, 2, 5, 1)
+            FeedFowardNetwork n = new FeedFowardNetwork(true, 2, 2, 1)
             {
                 LearningConstant = .03,
                 totalTrainingSize = 200,
@@ -106,7 +106,8 @@ namespace nnn
                 {
                     double[] inputs = allInputs[i].ToArray();
                     double[] correctOutputs = allOutputs[i].ToArray();
-                    n.bpParallel(n.ffParallel(inputs), correctOutputs);
+                    double[] ff = n.ffParallel(inputs); 
+                    n.bpParallel(ff, correctOutputs);
                     if (i % n.miniBatchSize == 0 && i != 0) 
                     {
                         n.averageAndCorrectParallel();

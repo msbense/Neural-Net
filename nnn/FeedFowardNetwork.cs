@@ -13,13 +13,14 @@ namespace nnn
         public List<List<Neuron>> Neurons;
         public int[] Structure { get; set; }
 
-        List<double[]> Weights; //Weights[layerIndex][neuronIndex * Structure[layerIndex - 1] + inputNeuronIndex]
-        List<double[]> Biases; //Biases[layerIndex][neuronIndex]                                
-        List<double[]> Inputs; 
-        List<double[]> Activations;
-        List<double[]> Errors;
+        public List<double[]> Weights; //Weights[layerIndex][neuronIndex * Structure[layerIndex - 1] + inputNeuronIndex]
+        public List<double[]> Biases; //Biases[layerIndex][neuronIndex]                                
+        public List<double[]> Inputs; 
+        public List<double[]> Activations;
+        public List<double[]> Errors;
         public FeedFowardNetwork(bool cudaEnabled, params int[] structure)
         {
+            this.rng = new Random();
             if (cudaEnabled)
             {
                 ParallelMethods.Initialize();
@@ -29,7 +30,12 @@ namespace nnn
             for (int layerIndex = 0; layerIndex < Structure.Length; layerIndex++)
             {
                 int numInputNeurons = (layerIndex > 0) ? Structure[layerIndex - 1] : 0;
-                Weights.Add(new double[Structure[layerIndex] * numInputNeurons]);
+                double[] setOfWeights = new double[Structure[layerIndex] * numInputNeurons];
+                for (int i = 0; i < setOfWeights.Length; i++)
+                {
+                    setOfWeights[i] = ((this.rng.NextDouble() - .5) * 2) * (1 / Math.Sqrt(setOfWeights.Length)); 
+                }
+                Weights.Add(setOfWeights);
             }
             
             Biases = new List<double[]>(Structure.Length);
@@ -113,7 +119,14 @@ namespace nnn
                 ParallelMethods.setFeedFowardBlockDim(new dim3(Structure[layerIndex]));
                 int numActivations = Activations[layerIndex].Length;
                 int numInputNeurons = Activations[layerIndex - 1].Length;
-                Activations[layerIndex] = ParallelMethods.runFeedFoward(Activations[layerIndex - 1], Weights[layerIndex], numActivations, numInputNeurons);
+                Activations[layerIndex] = ParallelMethods.runFeedFoward(Activations[layerIndex - 1], Weights[layerIndex], Biases[layerIndex], numActivations, numInputNeurons);
+                Console.WriteLine("Input0: " + Activations[layerIndex - 1][0] + "\tInput1: " + Activations[layerIndex - 1][1]);
+                Console.WriteLine("Input0 to Output0: " + Weights[layerIndex][0 * Structure[layerIndex - 1] + 0] + "\tInput1 to Output0: " + Weights[layerIndex][0 * Structure[layerIndex - 1] + 1]);
+                Console.WriteLine("Output0 Bias: " + Biases[layerIndex][0] + "\n");
+                Console.WriteLine("Input0 to Output1: " + Weights[layerIndex][1 * Structure[layerIndex - 1] + 0] + "\tInput1 to Output1: " + Weights[layerIndex][1 * Structure[layerIndex - 1] + 1]);
+                Console.WriteLine("Output1 Bias: " + Biases[layerIndex][1] + "\n");
+                Console.WriteLine("Output0 Activation: " + Activations[layerIndex][0] + "\tOutput1 Activation: " + Activations[layerIndex][1]);
+                Console.ReadKey();
             }
             return Activations[Activations.Count - 1];
         }
@@ -180,14 +193,12 @@ namespace nnn
         {
             for (int layerIndex = 1; layerIndex < Activations.Count; layerIndex++)
             {
-                ParallelMethods.setAverageErrorsDim(new dim3(Structure[layerIndex]));
-                Errors[layerIndex] = ParallelMethods.runAverageErrors(Errors[layerIndex], this.miniBatchSize);
+                ParallelMethods.setAverageAndCorrectDim(new dim3(Structure[layerIndex]));
+                Tuple<double[], double[]> pair = ParallelMethods.runAverageAndCorrect(Errors[layerIndex], Weights[layerIndex], Biases[layerIndex], Activations[layerIndex - 1], Structure[layerIndex - 1], this.miniBatchSize);
+                Weights[layerIndex] = pair.Item1;
+                Biases[layerIndex] = pair.Item2;
             }
 
-            for (int layerIndex = 1; layerIndex < Activations.Count; layerIndex++)
-            {
-                //Adjust weights + biases
-            }
         }
         public void averageAndCorrect()
         {
